@@ -51,4 +51,13 @@ const loginUser = async (req, res) => {
   }
 };
 
-export { registerUser, loginUser };
+const getCurrentUser = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id).select("-password");
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ message: "Failed to fetch user details" });
+  }
+};
+
+export { registerUser, loginUser, getCurrentUser };
