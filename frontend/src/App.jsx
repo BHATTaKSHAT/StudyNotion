@@ -8,6 +8,7 @@ import {
 import Register from "./components/Register.jsx";
 import Login from "./components/Login.jsx";
 import Dashboard from "./components/Dashboard.jsx";
+import CourseDetail from "./components/CourseDetail.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import "./App.css";
 
@@ -23,6 +24,14 @@ const App = () => {
           element={
             <ProtectedRoute>
               <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/course/:id"
+          element={
+            <ProtectedRoute>
+              <CourseDetail />
             </ProtectedRoute>
           }
         />

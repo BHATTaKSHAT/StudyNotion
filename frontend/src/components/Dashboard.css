@@ -1,0 +1,36 @@
+.dashboard {
+  padding: 2rem;
+}
+
+.course-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.course-card {
+  background-color: #4aaf83;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  width: calc(33.333% - 1rem);
+  box-sizing: border-box;
+}
+
+.course-card h3 {
+  margin: 0 0 0.5rem;
+}
+
+.course-card p {
+  margin: 0;
+}
+
+.logout {
+  margin-top: 2rem;
+  background-color: #dc3545;
+}
+
+.logout:hover {
+  background-color: #c82333;
+}

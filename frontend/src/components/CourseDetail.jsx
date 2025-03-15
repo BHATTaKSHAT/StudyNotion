@@ -1,0 +1,133 @@
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { useParams, useNavigate } from "react-router-dom";
+import "./CourseDetail.css";
+
+const CourseDetail = () => {
+  const { id } = useParams();
+  const [course, setCourse] = useState(null);
+  const [currentItemIndex, setCurrentItemIndex] = useState(0);
+  const [selectedOption, setSelectedOption] = useState({});
+  const [quizResults, setQuizResults] = useState({});
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    axios
+      .get(`http://localhost:5000/api/courses/${id}`)
+      .then((res) => setCourse(res.data))
+      .catch((err) => console.error(err));
+  }, [id]);
+
+  // Create a flattened array of items (lessons and their quizzes)
+  const flattenedItems =
+    course &&
+    course.lessons.reduce((acc, lesson, index) => {
+      acc.push({ type: "lesson", lessonIndex: index, title: lesson.title });
+      if (lesson.quiz) {
+        acc.push({
+          type: "quiz",
+          lessonIndex: index,
+          title: `Quiz ${index + 1}`,
+        });
+      }
+      return acc;
+    }, []);
+
+  const handleItemClick = (index) => {
+    setCurrentItemIndex(index);
+    setSelectedOption({});
+    setQuizResults({});
+  };
+
+  const handleNext = () => {
+    if (currentItemIndex < flattenedItems.length - 1) {
+      setCurrentItemIndex(currentItemIndex + 1);
+      setSelectedOption({});
+      setQuizResults({});
+    } else {
+      navigate("/dashboard");
+    }
+  };
+
+  const handleOptionSelect = (questionIndex, option) => {
+    const lessonIndex = flattenedItems[currentItemIndex].lessonIndex;
+    const isCorrect =
+      course.lessons[lessonIndex].quiz.questions[questionIndex]
+        .correctAnswer === option;
+    setSelectedOption({ ...selectedOption, [questionIndex]: option });
+    setQuizResults({ ...quizResults, [questionIndex]: isCorrect });
+  };
+
+  if (!course || !flattenedItems) return <div>Loading...</div>;
+
+  const currentItem = flattenedItems[currentItemIndex];
+  const lessonData = course.lessons[currentItem.lessonIndex];
+
+  return (
+    <div className="course-detail">
+      <h2>{course.title}</h2>
+      <div className="lesson-explorer">
+        <h3>Course Items</h3>
+        <ul>
+          {flattenedItems.map((item, index) => (
+            <li
+              key={index}
+              className={index === currentItemIndex ? "active" : ""}
+              onClick={() => handleItemClick(index)}
+            >
+              {item.title}
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div className="lesson-content">
+        {currentItem.type === "lesson" ? (
+          <>
+            <h3>{lessonData.title}</h3>
+            <p>{lessonData.article}</p>
+            {lessonData.videos.map((video, idx) => (
+              <video key={idx} controls>
+                <source src={video} type="video/mp4" />
+              </video>
+            ))}
+          </>
+        ) : (
+          lessonData.quiz && (
+            <div className="quiz">
+              <h4>{`Quiz for ${lessonData.title}`}</h4>
+              {lessonData.quiz.questions.map((question, qIndex) => (
+                <div key={qIndex} className="question">
+                  <p>{question.questionText}</p>
+                  <ul>
+                    {question.options.map((option, idx) => (
+                      <li
+                        key={idx}
+                        className={
+                          selectedOption[qIndex] === option
+                            ? quizResults[qIndex]
+                              ? "correct"
+                              : "incorrect"
+                            : ""
+                        }
+                        onClick={() => handleOptionSelect(qIndex, option)}
+                      >
+                        {option}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          )
+        )}
+        <button onClick={handleNext}>
+          {currentItemIndex < flattenedItems.length - 1
+            ? "Next"
+            : "Go Back to Dashboard"}
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export default CourseDetail;
