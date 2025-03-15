@@ -39,6 +39,14 @@ const CourseDetail = () => {
     setQuizResults({});
   };
 
+  const handlePrev = () => {
+    if (currentItemIndex > 0) {
+      setCurrentItemIndex(currentItemIndex - 1);
+      setSelectedOption({});
+      setQuizResults({});
+    }
+  };
+
   const handleNext = () => {
     if (currentItemIndex < flattenedItems.length - 1) {
       setCurrentItemIndex(currentItemIndex + 1);
@@ -120,11 +128,16 @@ const CourseDetail = () => {
             </div>
           )
         )}
-        <button onClick={handleNext}>
-          {currentItemIndex < flattenedItems.length - 1
-            ? "Next"
-            : "Go Back to Dashboard"}
-        </button>
+        <div className="navigation-buttons">
+          <button onClick={handlePrev} disabled={currentItemIndex === 0}>
+            Previous
+          </button>
+          <button onClick={handleNext}>
+            {currentItemIndex < flattenedItems.length - 1
+              ? "Next"
+              : "Go Back to Dashboard"}
+          </button>
+        </div>
       </div>
     </div>
   );

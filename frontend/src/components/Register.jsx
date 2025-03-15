@@ -22,6 +22,7 @@ const Register = () => {
       );
       setMessage("Registration successful!");
       localStorage.setItem("token", response.data.token);
+      localStorage.setItem("username", response.data.username); // Ensure this line is present
       navigate("/dashboard");
     } catch (error) {
       setMessage("Registration failed. Please try again.");

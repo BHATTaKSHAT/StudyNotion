@@ -5,28 +5,34 @@ import "./Dashboard.css";
 
 const Dashboard = () => {
   const [courses, setCourses] = useState([]);
+  const [username, setUsername] = useState("");
   const navigate = useNavigate();
 
-  // Fetch courses on component mount
   useEffect(() => {
     axios
       .get("http://localhost:5000/api/courses")
       .then((res) => setCourses(res.data))
       .catch((err) => console.error(err));
+
+    const storedUsername = localStorage.getItem("username");
+    if (storedUsername) {
+      setUsername(storedUsername);
+    }
   }, []);
 
   const handleCourseClick = (courseId) => {
-    // Navigate to a page that shows course details and lessons explorer
     navigate(`/course/${courseId}`);
   };
 
   const handleLogout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("username");
     navigate("/login");
   };
 
   return (
     <div>
+      <h2>Welcome, {username}</h2>
       <h2>Available Courses</h2>
       <div className="course-list">
         {courses.map((course) => (
