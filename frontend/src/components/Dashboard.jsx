@@ -31,8 +31,16 @@ const Dashboard = () => {
   };
 
   return (
-    <div>
-      <h2>Welcome, {username}</h2>
+    <div className="dashboard">
+      <div className="header">
+        <h2 className="welcome-text">
+          <span className="italic">Welcome, </span>
+          <span className="bold">{username}</span>
+        </h2>
+        <button className="logout" onClick={handleLogout}>
+          Logout
+        </button>
+      </div>
       <h2>Available Courses</h2>
       <div className="course-list">
         {courses.map((course) => (
@@ -46,9 +54,6 @@ const Dashboard = () => {
           </div>
         ))}
       </div>
-      <button className="logout" onClick={handleLogout}>
-        Logout
-      </button>
     </div>
   );
 };

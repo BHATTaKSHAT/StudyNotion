@@ -73,9 +73,8 @@ const CourseDetail = () => {
 
   return (
     <div className="course-detail">
-      <h2>{course.title}</h2>
       <div className="lesson-explorer">
-        <h3>Course Items</h3>
+        <h3>{course.title}</h3>
         <ul>
           {flattenedItems.map((item, index) => (
             <li
@@ -92,12 +91,12 @@ const CourseDetail = () => {
         {currentItem.type === "lesson" ? (
           <>
             <h3>{lessonData.title}</h3>
-            <p>{lessonData.article}</p>
             {lessonData.videos.map((video, idx) => (
-              <video key={idx} controls>
+              <video width="640" key={idx} controls>
                 <source src={video} type="video/mp4" />
               </video>
             ))}
+            <p>{lessonData.article}</p>
           </>
         ) : (
           lessonData.quiz && (
