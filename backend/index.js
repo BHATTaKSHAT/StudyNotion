@@ -4,6 +4,7 @@ import cors from "cors";
 import db from "./database/db.js";
 import authRoutes from "./routes/authRoutes.js";
 import courseRoutes from "./routes/courseRoutes.js";
+import progressRoutes from "./routes/progressRoutes.js";
 
 dotenv.config({
   path: "./.env",
@@ -16,6 +17,7 @@ app.use(express.json());
 
 app.use("/api/auth", authRoutes);
 app.use("/api/courses", courseRoutes);
+app.use("/api/progress", progressRoutes);
 
 db()
   .then(() => {

@@ -16,6 +16,13 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  progress: [
+    {
+      courseId: { type: mongoose.Schema.Types.ObjectId, ref: "Course" },
+      completedLessons: [Number], // Array of lesson indices
+      completedQuizzes: [Number], // Array of quiz indices
+    },
+  ],
 });
 
 userSchema.pre("save", async function (next) {

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import YouTube from "react-youtube";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import "./CourseDetail.css";
@@ -9,7 +10,9 @@ const CourseDetail = () => {
   const [currentItemIndex, setCurrentItemIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState({});
   const [quizResults, setQuizResults] = useState({});
+  const [videoProgress, setVideoProgress] = useState(0);
   const navigate = useNavigate();
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
     axios
@@ -18,7 +21,7 @@ const CourseDetail = () => {
       .catch((err) => console.error(err));
   }, [id]);
 
-  // Create a flattened array of items (lessons and their quizzes)
+  // Flatten lessons and quizzes
   const flattenedItems =
     course &&
     course.lessons.reduce((acc, lesson, index) => {
@@ -57,6 +60,60 @@ const CourseDetail = () => {
     }
   };
 
+  // Update progress based on YouTube video events via react-youtube
+  const onPlayerStateChange = (event) => {
+    // When the video is playing, you can start tracking progress
+    if (event.data === window.YT.PlayerState.PLAYING) {
+      const duration = event.target.getDuration();
+      const currentTime = event.target.getCurrentTime();
+      const progress = (currentTime / duration) * 100;
+      setVideoProgress(progress);
+      // If progress is over 90%, mark lesson as complete
+      if (progress >= 90) {
+        handleLessonCompletion();
+      }
+    }
+    // Optionally, handle other states like PAUSED or ENDED too.
+    if (event.data === window.YT.PlayerState.ENDED) {
+      // Ensure completion on finished playing
+      setVideoProgress(100);
+      handleLessonCompletion();
+    }
+  };
+
+  const handleLessonCompletion = () => {
+    axios.post(
+      "http://localhost:5000/api/progress/update",
+      {
+        courseId: id,
+        lessonIndex: flattenedItems[currentItemIndex].lessonIndex,
+        isQuiz: false,
+        isCompleted: true,
+      },
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+  };
+
+  const handleQuizCompletion = () => {
+    const isCompleted = Object.values(quizResults).every((result) => result);
+    if (isCompleted) {
+      axios.post(
+        "http://localhost:5000/api/progress/update",
+        {
+          courseId: id,
+          lessonIndex: flattenedItems[currentItemIndex].lessonIndex,
+          isQuiz: true,
+          isCompleted: true,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+    }
+  };
+
   const handleOptionSelect = (questionIndex, option) => {
     const lessonIndex = flattenedItems[currentItemIndex].lessonIndex;
     const isCorrect =
@@ -64,6 +121,7 @@ const CourseDetail = () => {
         .correctAnswer === option;
     setSelectedOption({ ...selectedOption, [questionIndex]: option });
     setQuizResults({ ...quizResults, [questionIndex]: isCorrect });
+    handleQuizCompletion();
   };
 
   if (!course || !flattenedItems) return <div>Loading...</div>;
@@ -92,9 +150,12 @@ const CourseDetail = () => {
           <>
             <h3>{lessonData.title}</h3>
             {lessonData.videos.map((video, idx) => (
-              <video width="640" key={idx} controls>
-                <source src={video} type="video/mp4" />
-              </video>
+              <YouTube
+                key={idx}
+                videoId={video.split("/").pop()} 
+                opts={{ width: "640", height: "360" }}
+                onStateChange={onPlayerStateChange}
+              />
             ))}
             <p>{lessonData.article}</p>
           </>
