@@ -96,14 +96,32 @@ const CourseDetail = () => {
     );
   };
 
-  const handleQuizCompletion = () => {
-    const isCompleted = Object.values(quizResults).every((result) => result);
-    if (isCompleted) {
+  const handleOptionSelect = (questionIndex, option) => {
+    const lessonIndex = flattenedItems[currentItemIndex].lessonIndex;
+    const isCorrect =
+      course.lessons[lessonIndex].quiz.questions[questionIndex]
+        .correctAnswer === option;
+    setSelectedOption((prev) => ({ ...prev, [questionIndex]: option }));
+    setQuizResults((prev) => ({ ...prev, [questionIndex]: isCorrect }));
+  };
+
+  useEffect(() => {
+    if (!course || !flattenedItems) return;
+    const lessonIndex = flattenedItems[currentItemIndex].lessonIndex;
+    if (!course.lessons[lessonIndex].quiz) return;
+
+    const totalQuestions = course.lessons[lessonIndex].quiz.questions.length;
+    const allAnswered = Object.keys(quizResults).length === totalQuestions;
+    const allCorrect = Object.values(quizResults).every(
+      (result) => result === true
+    );
+
+    if (allAnswered && allCorrect) {
       axios.post(
         "http://localhost:5000/api/progress/update",
         {
           courseId: id,
-          lessonIndex: flattenedItems[currentItemIndex].lessonIndex,
+          lessonIndex,
           isQuiz: true,
           isCompleted: true,
         },
@@ -112,17 +130,7 @@ const CourseDetail = () => {
         }
       );
     }
-  };
-
-  const handleOptionSelect = (questionIndex, option) => {
-    const lessonIndex = flattenedItems[currentItemIndex].lessonIndex;
-    const isCorrect =
-      course.lessons[lessonIndex].quiz.questions[questionIndex]
-        .correctAnswer === option;
-    setSelectedOption({ ...selectedOption, [questionIndex]: option });
-    setQuizResults({ ...quizResults, [questionIndex]: isCorrect });
-    handleQuizCompletion();
-  };
+  }, [quizResults, course, flattenedItems, currentItemIndex, id, token]);
 
   if (!course || !flattenedItems) return <div>Loading...</div>;
 
