@@ -181,6 +181,17 @@
     color: #fff;
 }
 
+.lesson-explorer li.completed {
+    background-color: #28a745;
+    color: white;
+}
+
+.lesson-explorer li.active.completed {
+  background-color: #1e5e2e; /* Dark Green */
+  color: white;
+}
+
+
 /* Quiz Items */
 .lesson-explorer :quiz {
     background-color: #f0ad4e;

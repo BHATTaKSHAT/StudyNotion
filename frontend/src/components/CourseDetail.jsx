@@ -11,6 +11,7 @@ const CourseDetail = () => {
   const [selectedOption, setSelectedOption] = useState({});
   const [quizResults, setQuizResults] = useState({});
   const [videoProgress, setVideoProgress] = useState(0);
+  const [progressData, setProgressData] = useState(null);
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
 
@@ -20,6 +21,17 @@ const CourseDetail = () => {
       .then((res) => setCourse(res.data))
       .catch((err) => console.error(err));
   }, [id]);
+
+  useEffect(() => {
+    if (token) {
+      axios
+        .get("http://localhost:5000/api/progress", {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then((res) => setProgressData(res.data))
+        .catch((err) => console.error(err));
+    }
+  }, [token]);
 
   // Flatten lessons and quizzes
   const flattenedItems =
@@ -142,15 +154,36 @@ const CourseDetail = () => {
       <div className="lesson-explorer">
         <h3>{course.title}</h3>
         <ul>
-          {flattenedItems.map((item, index) => (
-            <li
-              key={index}
-              className={index === currentItemIndex ? "active" : ""}
-              onClick={() => handleItemClick(index)}
-            >
-              {item.title}
-            </li>
-          ))}
+          {flattenedItems.map((item, index) => {
+            let isCompleted = false;
+            if (progressData) {
+              const courseProgress = progressData.find(
+                (p) => p.courseId._id === id
+              );
+              if (courseProgress) {
+                if (item.type === "lesson") {
+                  isCompleted = courseProgress.completedLessons.includes(
+                    item.lessonIndex
+                  );
+                } else if (item.type === "quiz") {
+                  isCompleted = courseProgress.completedQuizzes.includes(
+                    item.lessonIndex
+                  );
+                }
+              }
+            }
+            return (
+              <li
+                key={index}
+                className={`${index === currentItemIndex ? "active" : ""} ${
+                  isCompleted ? "completed" : ""
+                }`}
+                onClick={() => handleItemClick(index)}
+              >
+                {item.title}
+              </li>
+            );
+          })}
         </ul>
       </div>
       <div className="lesson-content">
@@ -160,7 +193,7 @@ const CourseDetail = () => {
             {lessonData.videos.map((video, idx) => (
               <YouTube
                 key={idx}
-                videoId={video.split("/").pop()} 
+                videoId={video.split("/").pop()}
                 opts={{ width: "640", height: "360" }}
                 onStateChange={onPlayerStateChange}
               />
