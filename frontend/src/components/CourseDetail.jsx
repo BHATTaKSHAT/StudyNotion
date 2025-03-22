@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import YouTube from "react-youtube";
 import axios from "axios";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import "./CourseDetail.css";
 
 const CourseDetail = () => {
@@ -14,7 +14,8 @@ const CourseDetail = () => {
   const [progressData, setProgressData] = useState(null);
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
-
+  const location = useLocation();
+ 
   useEffect(() => {
     axios
       .get(`http://localhost:5000/api/courses/${id}`)
@@ -47,6 +48,39 @@ const CourseDetail = () => {
       }
       return acc;
     }, []);
+
+    const queryParams = new URLSearchParams(location.search);
+    const initialLessonIndex = queryParams.get("lesson");
+    const initialQuizIndex = queryParams.get("quiz");
+    const [appliedResume, setAppliedResume] = useState(false);
+
+    useEffect(() => {
+      if(!course || !flattenedItems) return;
+
+      if (initialLessonIndex) {
+        const lessonIndex = parseInt(initialLessonIndex, 10);
+        const lessonItemIndex = flattenedItems.findIndex(
+          (item) => item.type === "lesson" && item.lessonIndex === lessonIndex
+        );
+        if (lessonItemIndex !== -1) {
+          setCurrentItemIndex(lessonItemIndex);
+          setAppliedResume(true);
+          // Remove query params from URL
+          navigate(`/course/${id}`, { replace: true });
+        }
+      } else if (initialQuizIndex) {
+        const quizIndex = parseInt(initialQuizIndex, 10);
+        const quizItemIndex = flattenedItems.findIndex(
+          (item) => item.type === "quiz" && item.lessonIndex === quizIndex
+        );
+        if (quizItemIndex !== -1) {
+          setCurrentItemIndex(quizItemIndex);
+          setAppliedResume(true);
+          // Remove query params from URL
+          navigate(`/course/${id}`, { replace: true });
+        }
+      }
+    }, [flattenedItems, initialLessonIndex, initialQuizIndex]);
 
   const handleItemClick = (index) => {
     setCurrentItemIndex(index);
@@ -192,7 +226,7 @@ const CourseDetail = () => {
             <h3>{lessonData.title}</h3>
             {lessonData.videos.map((video, idx) => (
               <YouTube
-                key={idx}
+                key={`${currentItem.lessonIndex}-${idx}`}
                 videoId={video.split("/").pop()}
                 opts={{ width: "640", height: "360" }}
                 onStateChange={onPlayerStateChange}

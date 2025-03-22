@@ -38,6 +38,30 @@ const Dashboard = () => {
     navigate(`/course/${courseId}`);
   };
 
+  const handleResumeClick = async (courseId) => {
+    const token = localStorage.getItem("token");
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/api/progress/resume/${courseId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const resumePoint = response.data;
+
+      if (resumePoint.type === "lesson") {
+        navigate(`/course/${courseId}?lesson=${resumePoint.index}`);
+      } else if (resumePoint.type === "quiz") {
+        navigate(`/course/${courseId}?quiz=${resumePoint.index}`);
+      }
+    } catch (error) {
+      console.error("Error fetching resume point:", error);
+    }
+  };
+
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("username");
@@ -94,6 +118,12 @@ const Dashboard = () => {
             >
               <h3>{course.title}</h3>
               <p>Progress: {getProgressForCourse(course._id)}</p>
+              <button
+                className="resume-button"
+                onClick={() => handleResumeClick(course._id)}
+              >
+                Resume
+              </button>
             </div>
           ))}
       </div>

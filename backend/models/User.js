@@ -38,6 +38,47 @@ userSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
+// ...existing code...
+
+userSchema.methods.getResumePoint = function (course) {
+  console.log("Finding progress for course:", course._id);
+
+  const courseProgress = this.progress.find((progress) =>
+    progress.courseId.equals(course._id)
+  );
+  console.log("Course Progress Found:", courseProgress);
+
+  if (!courseProgress) {
+    console.log("No progress found, returning first lesson");
+    return { type: "lesson", index: 0 };
+  }
+
+  const { completedLessons, completedQuizzes } = courseProgress;
+  console.log("Completed Lessons:", completedLessons);
+  console.log("Completed Quizzes:", completedQuizzes);
+
+  // Iterate through lessons in order
+  for (let i = 0; i < course.lessons.length; i++) {
+    const lesson = course.lessons[i];
+
+    if (!completedLessons.includes(i)) {
+      console.log("Resuming to incomplete lesson:", i);
+      return { type: "lesson", index: i };
+    }
+
+    if (lesson.quiz && !completedQuizzes.includes(i)) {
+      console.log("Resuming to quiz for lesson:", i);
+      return { type: "quiz", index: i };
+    }
+  }
+
+  console.log("All lessons and quizzes completed");
+  return null;
+};
+
+
+// ...existing code...
+
 const User = mongoose.model("User", userSchema);
 
 export default User;
