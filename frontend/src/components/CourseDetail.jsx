@@ -15,7 +15,9 @@ const CourseDetail = () => {
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
   const location = useLocation();
- 
+  const [player, setPlayer] = useState(null);
+
+
   useEffect(() => {
     axios
       .get(`http://localhost:5000/api/courses/${id}`)
@@ -49,38 +51,38 @@ const CourseDetail = () => {
       return acc;
     }, []);
 
-    const queryParams = new URLSearchParams(location.search);
-    const initialLessonIndex = queryParams.get("lesson");
-    const initialQuizIndex = queryParams.get("quiz");
-    const [appliedResume, setAppliedResume] = useState(false);
+  const queryParams = new URLSearchParams(location.search);
+  const initialLessonIndex = queryParams.get("lesson");
+  const initialQuizIndex = queryParams.get("quiz");
+  const [appliedResume, setAppliedResume] = useState(false);
 
-    useEffect(() => {
-      if(!course || !flattenedItems) return;
+  useEffect(() => {
+    if (!course || !flattenedItems) return;
 
-      if (initialLessonIndex) {
-        const lessonIndex = parseInt(initialLessonIndex, 10);
-        const lessonItemIndex = flattenedItems.findIndex(
-          (item) => item.type === "lesson" && item.lessonIndex === lessonIndex
-        );
-        if (lessonItemIndex !== -1) {
-          setCurrentItemIndex(lessonItemIndex);
-          setAppliedResume(true);
-          // Remove query params from URL
-          navigate(`/course/${id}`, { replace: true });
-        }
-      } else if (initialQuizIndex) {
-        const quizIndex = parseInt(initialQuizIndex, 10);
-        const quizItemIndex = flattenedItems.findIndex(
-          (item) => item.type === "quiz" && item.lessonIndex === quizIndex
-        );
-        if (quizItemIndex !== -1) {
-          setCurrentItemIndex(quizItemIndex);
-          setAppliedResume(true);
-          // Remove query params from URL
-          navigate(`/course/${id}`, { replace: true });
-        }
+    if (initialLessonIndex) {
+      const lessonIndex = parseInt(initialLessonIndex, 10);
+      const lessonItemIndex = flattenedItems.findIndex(
+        (item) => item.type === "lesson" && item.lessonIndex === lessonIndex
+      );
+      if (lessonItemIndex !== -1) {
+        setCurrentItemIndex(lessonItemIndex);
+        setAppliedResume(true);
+        // Remove query params from URL
+        navigate(`/course/${id}`, { replace: true });
       }
-    }, [flattenedItems, initialLessonIndex, initialQuizIndex]);
+    } else if (initialQuizIndex) {
+      const quizIndex = parseInt(initialQuizIndex, 10);
+      const quizItemIndex = flattenedItems.findIndex(
+        (item) => item.type === "quiz" && item.lessonIndex === quizIndex
+      );
+      if (quizItemIndex !== -1) {
+        setCurrentItemIndex(quizItemIndex);
+        setAppliedResume(true);
+        // Remove query params from URL
+        navigate(`/course/${id}`, { replace: true });
+      }
+    }
+  }, [flattenedItems, initialLessonIndex, initialQuizIndex]);
 
   const handleItemClick = (index) => {
     setCurrentItemIndex(index);
@@ -107,39 +109,94 @@ const CourseDetail = () => {
   };
 
   // Update progress based on YouTube video events via react-youtube
-  const onPlayerStateChange = (event) => {
-    // When the video is playing, you can start tracking progress
-    if (event.data === window.YT.PlayerState.PLAYING) {
-      const duration = event.target.getDuration();
-      const currentTime = event.target.getCurrentTime();
-      const progress = (currentTime / duration) * 100;
-      setVideoProgress(progress);
-      // If progress is over 90%, mark lesson as complete
-      if (progress >= 90) {
-        handleLessonCompletion();
-      }
-    }
-    // Optionally, handle other states like PAUSED or ENDED too.
-    if (event.data === window.YT.PlayerState.ENDED) {
-      // Ensure completion on finished playing
-      setVideoProgress(100);
-      handleLessonCompletion();
-    }
-  };
+ const onPlayerStateChange = (event) => {
+   if (!event || !event.target) return;
 
-  const handleLessonCompletion = () => {
+   const duration = event.target.getDuration();
+   const currentTime = event.target.getCurrentTime();
+   const progress = (currentTime / duration) * 100;
+
+   if (event.data === window.YT.PlayerState.PLAYING) {
+     setVideoProgress(progress);
+
+     // If progress is over 90%, mark lesson as complete
+     if (progress >= 90) {
+       handleLessonCompletion();
+     }
+   }
+
+   if (event.data === window.YT.PlayerState.PAUSED) {
+     // Update resume point only if progress is less than 90%
+     if (progress < 90) {
+       updateResume(currentTime);
+     }
+   }
+
+   if (event.data === window.YT.PlayerState.ENDED) {
+     // Ensure completion on finished playing
+     setVideoProgress(100);
+     handleLessonCompletion();
+   }
+ };
+
+  const updateResume = (currentTime, duration) => {
     axios.post(
-      "http://localhost:5000/api/progress/update",
+      "http://localhost:5000/api/progress/update-resume",
       {
         courseId: id,
         lessonIndex: flattenedItems[currentItemIndex].lessonIndex,
-        isQuiz: false,
-        isCompleted: true,
+        timestamp: currentTime,
+        videoDuration: duration,
       },
       {
         headers: { Authorization: `Bearer ${token}` },
       }
     );
+  };
+
+  const handleLessonCompletion = () => {
+    const lessonIndex = flattenedItems[currentItemIndex].lessonIndex;
+
+    axios
+      .post(
+        "http://localhost:5000/api/progress/update",
+        {
+          courseId: id,
+          lessonIndex,
+          isQuiz: false,
+          isCompleted: true,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
+      .then(() => {
+        // Update local progressData so that the completed lesson is marked complete
+        setProgressData((prevProgress) => {
+          if (!prevProgress) return prevProgress;
+
+          const newProgress = prevProgress.map((progress) => {
+            if (progress.courseId._id === id) {
+              // Add the lesson to completedLessons
+              if (!progress.completedLessons.includes(lessonIndex)) {
+                progress.completedLessons.push(lessonIndex);
+              }
+
+              // Clear lastWatched and remove related data from lastWatchedIndex
+              if (progress.lastWatched?.lessonIndex === lessonIndex) {
+                progress.lastWatched = null;
+              }
+              progress.lastWatchedIndex = progress.lastWatchedIndex.filter(
+                (entry) => entry.lessonIndex !== lessonIndex
+              );
+            }
+            return progress;
+          });
+
+          return newProgress;
+        });
+      })
+      .catch((err) => console.error("Error marking lesson complete:", err));
   };
 
   const handleOptionSelect = (questionIndex, option) => {
@@ -183,6 +240,50 @@ const CourseDetail = () => {
   const currentItem = flattenedItems[currentItemIndex];
   const lessonData = course.lessons[currentItem.lessonIndex];
 
+  const currentProgress =
+    progressData && progressData.find((p) => p.courseId._id === id);
+
+  // Determine the current lesson index from the current item
+  const currentLessonIndex = flattenedItems[currentItemIndex].lessonIndex;
+
+  // Do not use resumeTime if the lesson is already marked completed
+  const isCurrentLessonCompleted =
+    currentProgress &&
+    currentProgress.completedLessons.includes(currentLessonIndex);
+
+  let resumeTime = 0;
+  if (!isCurrentLessonCompleted && currentProgress) {
+    if (
+      currentProgress.lastWatched &&
+      currentProgress.lastWatched.lessonIndex === currentLessonIndex
+    ) {
+      resumeTime = currentProgress.lastWatched.timestamp;
+    } else if (currentProgress.lastWatchedIndex?.length) {
+      // Filter only those resume entries for the current lesson
+      const lessonResumes = currentProgress.lastWatchedIndex.filter(
+        (entry) => entry.lessonIndex === currentLessonIndex
+      );
+      if (lessonResumes.length > 0) {
+        resumeTime = lessonResumes[lessonResumes.length - 1].timestamp;
+      }
+    }
+  }
+
+  const onPlayerReady = (event) => {
+     setPlayer(event.target);
+     console.log("onPlayerReady resumeTime:", resumeTime);
+     if (resumeTime > 0) {
+       event.target.seekTo(resumeTime, true);
+     }
+  };
+
+  // const handleVideoClick = () => {
+  //   if (player && resumeTime > 0) {
+  //     player.seekTo(resumeTime, true);
+  //     player.playVideo();
+  //   }
+  // };
+
   return (
     <div className="course-detail">
       <div className="lesson-explorer">
@@ -225,12 +326,17 @@ const CourseDetail = () => {
           <>
             <h3>{lessonData.title}</h3>
             {lessonData.videos.map((video, idx) => (
-              <YouTube
-                key={`${currentItem.lessonIndex}-${idx}`}
-                videoId={video.split("/").pop()}
-                opts={{ width: "640", height: "360" }}
-                onStateChange={onPlayerStateChange}
-              />
+                <YouTube
+                  key={`${currentItem.lessonIndex}-${idx}`}
+                  videoId={video.split("/").pop()}
+                  opts={{
+                    width: "640",
+                    height: "360",
+                    playerVars: { start: resumeTime }
+                  }}
+                  onReady={onPlayerReady}
+                  onStateChange={onPlayerStateChange}
+                />
             ))}
             <p>{lessonData.article}</p>
           </>

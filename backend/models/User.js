@@ -21,6 +21,16 @@ const userSchema = new mongoose.Schema({
       courseId: { type: mongoose.Schema.Types.ObjectId, ref: "Course" },
       completedLessons: [Number], // Array of lesson indices
       completedQuizzes: [Number], // Array of quiz indices
+      lastWatched: {
+        lessonIndex: Number,
+        timestamp: Number,
+      },
+      lastWatchedIndex: [
+        {
+          lessonIndex: Number,
+          timestamp: Number,
+        },
+      ],
     },
   ],
 });
@@ -52,6 +62,20 @@ userSchema.methods.getResumePoint = function (course) {
     console.log("No progress found, returning first lesson");
     return { type: "lesson", index: 0 };
   }
+
+   if (
+     courseProgress &&
+     courseProgress.lastWatched &&
+     typeof courseProgress.lastWatched.timestamp === "number" &&
+     courseProgress.lastWatched.timestamp > 0
+   ) {
+     console.log("Resuming from lastWatched:", courseProgress.lastWatched);
+     return {
+       type: "lesson",
+       index: courseProgress.lastWatched.lessonIndex,
+       timestamp: courseProgress.lastWatched.timestamp,
+     };
+   }
 
   const { completedLessons, completedQuizzes } = courseProgress;
   console.log("Completed Lessons:", completedLessons);
