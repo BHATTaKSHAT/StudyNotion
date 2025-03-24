@@ -7,6 +7,10 @@ const Dashboard = () => {
   const [courses, setCourses] = useState([]);
   const [progress, setProgress] = useState([]);
   const [username, setUsername] = useState("");
+  // New state variables for pagination (visible count)
+  const [myCoursesVisibleCount, setMyCoursesVisibleCount] = useState(3);
+  const [availableCoursesVisibleCount, setAvailableCoursesVisibleCount] =
+    useState(3);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -78,7 +82,7 @@ const Dashboard = () => {
     // Total lessons in the course
     const totalLessons = courseData.lessons.length;
 
-    // Total quizzes present across lessons
+    // Total quizzes across lessons
     const totalQuizzes = courseData.lessons.filter(
       (lesson) => lesson.quiz
     ).length;
@@ -94,6 +98,14 @@ const Dashboard = () => {
     // Calculate progress percentage
     return `${Math.round((completedItems / totalItems) * 100)}%`;
   };
+
+  // Filter courses into My Courses and Available Courses sections
+  const myCourses = courses.filter(
+    (course) => getProgressForCourse(course._id) !== "0%"
+  );
+  const availableCourses = courses.filter(
+    (course) => getProgressForCourse(course._id) === "0%"
+  );
 
   return (
     <div className="dashboard">
@@ -114,48 +126,52 @@ const Dashboard = () => {
       <section className="courses-section">
         <h2 className="section-title">My Courses</h2>
         <div className="course-list">
-          {courses
-            .filter((course) => getProgressForCourse(course._id) !== "0%")
-            .map((course) => (
-              <div
-                className="course-card"
-                key={course._id}
-                onClick={() => handleCourseClick(course._id)}
-              >
-                <div className="course-info">
-                  <h3 className="course-title">{course.title}</h3>
-                  <div className="progress-container">
-                    <div
-                      className="progress-bar"
-                      style={{
-                        width: getProgressForCourse(course._id),
-                      }}
-                    ></div>
-                    <span className="progress-text">
-                      Progress: {getProgressForCourse(course._id)}
-                    </span>
-                  </div>
+          {myCourses.slice(0, myCoursesVisibleCount).map((course) => (
+            <div
+              className="course-card"
+              key={course._id}
+              onClick={() => handleCourseClick(course._id)}
+            >
+              <div className="course-info">
+                <h3 className="course-title">{course.title}</h3>
+                <div className="progress-container">
+                  <div
+                    className="progress-bar"
+                    style={{ width: getProgressForCourse(course._id) }}
+                  ></div>
+                  <span className="progress-text">
+                    Progress: {getProgressForCourse(course._id)}
+                  </span>
                 </div>
-                <button
-                  className="resume-button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleResumeClick(course._id);
-                  }}
-                >
-                  <span className="resume-icon">▶️</span>
-                  Resume
-                </button>
               </div>
-            ))}
+              <button
+                className="resume-button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleResumeClick(course._id);
+                }}
+              >
+                <span className="resume-icon">▶️</span>
+                Resume
+              </button>
+            </div>
+          ))}
         </div>
+        {myCoursesVisibleCount < myCourses.length && (
+          <button
+            className="view-all-btn"
+            onClick={() => setMyCoursesVisibleCount(myCoursesVisibleCount + 3)}
+          >
+            View All
+          </button>
+        )}
       </section>
 
       <section className="courses-section">
         <h2 className="section-title">Available Courses</h2>
         <div className="course-list">
-          {courses
-            .filter((course) => getProgressForCourse(course._id) === "0%")
+          {availableCourses
+            .slice(0, availableCoursesVisibleCount)
             .map((course) => (
               <div
                 className="course-card new-course"
@@ -173,6 +189,16 @@ const Dashboard = () => {
               </div>
             ))}
         </div>
+        {availableCoursesVisibleCount < availableCourses.length && (
+          <button
+            className="view-all-btn"
+            onClick={() =>
+              setAvailableCoursesVisibleCount(availableCoursesVisibleCount + 3)
+            }
+          >
+            View All
+          </button>
+        )}
       </section>
     </div>
   );

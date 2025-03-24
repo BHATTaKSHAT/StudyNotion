@@ -9,8 +9,9 @@
 
 .course-list {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 2rem;
+  margin-bottom: 1rem;
 }
 
 .course-card {
@@ -222,6 +223,7 @@ h2 {
 .courses-section {
   margin-bottom: 3rem;
   animation: fadeIn 0.5s ease-out;
+  margin-bottom: 4rem;
 }
 
 .section-title {
@@ -315,4 +317,29 @@ h2 {
   .course-list {
     grid-template-columns: 1fr;
   }
+}
+
+.view-all-btn {
+  display: block;
+  margin: 2rem auto 0;
+  padding: 0.8rem 2rem;
+  background: linear-gradient(45deg, #4d7cfe, #14bae4);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(77, 124, 254, 0.3);
+}
+
+.view-all-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(77, 124, 254, 0.4);
+}
+
+.view-all-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 15px rgba(77, 124, 254, 0.3);
 }

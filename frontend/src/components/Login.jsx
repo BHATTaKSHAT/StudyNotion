@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import "./Auth.css";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -20,7 +21,7 @@ const Login = () => {
       );
       setMessage("Login successful!");
       localStorage.setItem("token", response.data.token);
-      localStorage.setItem("username", response.data.username); // Ensure this line is present
+      localStorage.setItem("username", response.data.username);
       navigate("/dashboard");
     } catch (error) {
       setMessage("Login failed. Please try again.");
@@ -29,29 +30,39 @@ const Login = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h2>Login</h2>
-      <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <button type="submit">Login</button>
-      {message && <p>{message}</p>}
-      <p>
-        Don't have an account?{" "}
-        <span className="link" onClick={() => navigate("/register")}>
-          Sign up
-        </span>
-      </p>
-    </form>
+    <div className="auth-container">
+      <form className="auth-form" onSubmit={handleSubmit}>
+        <h2>Welcome Back</h2>
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <button type="submit">Login</button>
+        {message && (
+          <div
+            className={`message ${
+              message.includes("successful") ? "success" : "error"
+            }`}
+          >
+            {message}
+          </div>
+        )}
+        <p>
+          Don't have an account?{" "}
+          <span className="link" onClick={() => navigate("/register")}>
+            Sign up
+          </span>
+        </p>
+      </form>
+    </div>
   );
 };
 
