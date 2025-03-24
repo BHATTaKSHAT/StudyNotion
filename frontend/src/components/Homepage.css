@@ -4,9 +4,10 @@
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  /* background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); */
+  background: black;
   position: relative;
-  overflow: hidden;
+  overflow: hidden; 
 }
 
 .auth-button {
@@ -84,15 +85,18 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 8rem 2rem 4rem 2rem;
+  padding: 1rem 2rem 4rem 2rem;
   text-align: center;
 }
 
 .hero-subtitle {
-  font-size: 1.5rem;
+  /* font-size: 1.5rem; */
   color: rgba(255, 255, 255, 0.8);
   margin-bottom: 3rem;
   animation: fadeInUp 1s ease-out 0.2s backwards;
+  font-size: 6rem;
+  font-weight: 900;
+  font-family: 'Impact', sans-serif;
 }
 
 .features {
@@ -165,5 +169,41 @@
   .feature-card {
     width: 100%;
     max-width: 280px;
+  }
+}
+
+.icon-book {
+  background-color: rgba(65, 105, 225, 0.1);
+}
+
+.icon-quiz {
+  background-color: rgba(255, 215, 0, 0.1);
+}
+
+.icon-progress {
+  background-color: rgba(30, 255, 0, 0.1);
+}
+
+.highlight {
+  color: rgb(240, 240, 49);
+}
+
+.blue {
+  background: linear-gradient(45deg, #4d7cfe, #11aa7e, #490453, #4d7cfe);
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradient 3s ease infinite;
+}
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
   }
 }
