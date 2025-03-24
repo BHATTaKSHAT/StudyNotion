@@ -1,23 +1,28 @@
 .dashboard {
-  padding: 0rem;
-  position: relative;
+  padding: 2rem;
+  font-family: "Arial", sans-serif;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  min-height: 100vh;
+  color: #333;
+  box-sizing: border-box;
 }
 
 .course-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
 }
 
 .course-card {
-  background-color: white;
-  color:black;
-  padding: 1rem;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background: white;
+  border-radius: 15px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
   cursor: pointer;
-  width: calc(33.333% - 1rem);
-  box-sizing: border-box;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   opacity: 0;
   transform: translateY(20px);
   animation: fadeInUp 0.5s ease forwards;
@@ -49,7 +54,7 @@
 
 .course-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
 @keyframes fadeInUp {
@@ -60,48 +65,60 @@
 }
 
 .course-card h3 {
-  margin: 0 0 0.5rem;
+  margin: 0 0 0.75rem;
+  font-size: 1.5rem;
+  color: #007bff;
 }
 
 .course-card p {
   margin: 0;
   font-style: italic;
+  color: #666;
 }
 
 .logout {
-  margin-top: 2rem;
-  background-color: #dc3545;
-  padding: 0.75rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: linear-gradient(45deg, #ff5252, #ff1744);
+  color: white;
   border: none;
-  border-radius: 4px;
+  padding: 0.8rem 1.5rem;
+  border-radius: 50px;
   cursor: pointer;
-  color: #fff;
   font-size: 1rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 .logout:hover {
-  background-color: #c82333;
-  filter: drop-shadow(0 0 2rem #dc3545);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(255, 23, 68, 0.4);
 }
 
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100%;
+  margin-bottom: 3rem;
+  padding: 1rem 2rem;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 15px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+  width: auto;
+  box-sizing: border-box;
+  position: relative;
 }
 
 .welcome-text {
-  font-size: 2rem;
+  font-size: 2.5rem;
   font-weight: bold;
-  font-family: Arial, sans-serif;
-  color: transparent;
-  background: linear-gradient(90deg, black, black);
-  background-repeat: no-repeat;
-  background-size: 0% 100%;
+  margin: 0;
+  background: linear-gradient(45deg, #2196f3, #00bfa6);
   background-clip: text;
-  animation: text-reveal 2s ease-out forwards;
-  animation: text-reveal 2s ease-out forwards;
+  -webkit-text-fill-color: transparent;
+  animation: fadeIn 1s ease-out;
+  word-wrap: break-word;
 }
 
 .italic {
@@ -110,6 +127,7 @@
 
 .bold {
   font-weight: bold;
+  color: #007bff;
 }
 
 @keyframes text-reveal {
@@ -123,28 +141,173 @@
 
 .resume-button,
 .start-button {
-  margin-top: 0.5rem;
-  padding: 0.5rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.8rem;
   border: none;
-  border-radius: 4px;
-  cursor: pointer;
+  border-radius: 50px;
   font-size: 1rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  margin-top: 0.5rem;
 }
 
 .resume-button {
-  background-color: #007bff;
+  background: linear-gradient(45deg, #2196f3, #00bfa6);
   color: white;
+  border: none;
+  padding: 0.75rem 1.25rem;
+  border-radius: 50px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 123, 255, 0.3);
+  margin-top: 1rem;
 }
 
 .resume-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
   background-color: #0056b3;
+  box-shadow: 0 4px 10px rgba(0, 123, 255, 0.5);
 }
 
 .start-button {
-  background-color: #28a745;
+  background: linear-gradient(45deg, #ff9800, #f57c00);
   color: white;
 }
 
 .start-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
   background-color: #1e7e34;
+}
+
+h2 {
+  color: #333;
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.welcome-container {
+  animation: slideIn 0.5s ease-out;
+  max-width: 70%;
+}
+
+.subtitle {
+  margin: 0.5rem 0 0;
+  color: #666;
+  font-size: 1.1rem;
+}
+
+.courses-section {
+  margin-bottom: 3rem;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.section-title {
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  color: #333;
+  position: relative;
+  padding-left: 1rem;
+}
+
+.section-title::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 70%;
+  background: linear-gradient(45deg, #2196f3, #00bfa6);
+  border-radius: 2px;
+}
+
+.course-info {
+  margin-bottom: 1rem;
+}
+
+.course-title {
+  font-size: 1.4rem;
+  color: #333;
+  margin: 0 0 1rem 0;
+}
+
+.progress-container {
+  background: #f0f0f0;
+  border-radius: 50px;
+  height: 10px;
+  overflow: hidden;
+  margin: 1rem 0;
+  position: relative;
+}
+
+.progress-bar {
+  height: 100%;
+  background: linear-gradient(45deg, #2196f3, #00bfa6);
+  border-radius: 50px;
+  transition: width 0.5s ease;
+}
+
+.progress-text {
+  display: block;
+  font-size: 0.9rem;
+  color: #666;
+  margin-top: 0.5rem;
+}
+
+.course-status {
+  color: #ff9800;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard {
+    padding: 1rem;
+  }
+
+  .header {
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .welcome-text {
+    font-size: 2rem;
+  }
+
+  .welcome-container {
+    max-width: 100%;
+  }
+
+  .course-list {
+    grid-template-columns: 1fr;
+  }
 }

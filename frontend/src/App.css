@@ -57,9 +57,9 @@ body {
   width: 100vw;
   /* max-width: 800px; */
   margin: 0 auto;
-  padding: 1rem;
+  padding: 0rem;
   box-sizing: border-box;
-  display: flex;
+  /* display: flex; */
   justify-content: center;
   align-items: center;
 }
@@ -69,10 +69,10 @@ body {
   background-color: #f0f2f5;
   margin: 0;
   padding: 0;
-  display: flex;
+  /* display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  height: 100vh; */
 }
 
 form {

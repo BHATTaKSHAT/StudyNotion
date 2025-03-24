@@ -98,51 +98,82 @@ const Dashboard = () => {
   return (
     <div className="dashboard">
       <div className="header">
-        <h2 className="welcome-text">
-          <span className="italic">Welcome, </span>
-          <span className="bold">{username}</span>
-        </h2>
+        <div className="welcome-container">
+          <h2 className="welcome-text">
+            <span className="italic">Welcome back,</span>
+            <span className="bold">{username}</span>
+          </h2>
+          <p className="subtitle">Continue your learning journey</p>
+        </div>
         <button className="logout" onClick={handleLogout}>
+          <span className="logout-icon">🚪</span>
           Logout
         </button>
       </div>
-      <h2>My Courses</h2>
-      <div className="course-list">
-        {courses
-          .filter((course) => getProgressForCourse(course._id) !== "0%")
-          .map((course) => (
-            <div
-              className="course-card"
-              key={course._id}
-              onClick={() => handleCourseClick(course._id)}
-            >
-              <h3>{course.title}</h3>
-              <p>Progress: {getProgressForCourse(course._id)}</p>
-              <button
-                className="resume-button"
-                onClick={() => handleResumeClick(course._id)}
-              >
-                Resume
-              </button>
-            </div>
-          ))}
-      </div>
 
-      {/* Available Courses Section */}
-      <h2>Available Courses</h2>
-      <div className="course-list">
-        {courses
-          .filter((course) => getProgressForCourse(course._id) === "0%")
-          .map((course) => (
-            <div
-              className="course-card"
-              key={course._id}
-              onClick={() => handleCourseClick(course._id)}
-            >
-              <h3>{course.title}</h3>
-            </div>
-          ))}
-      </div>
+      <section className="courses-section">
+        <h2 className="section-title">My Courses</h2>
+        <div className="course-list">
+          {courses
+            .filter((course) => getProgressForCourse(course._id) !== "0%")
+            .map((course) => (
+              <div
+                className="course-card"
+                key={course._id}
+                onClick={() => handleCourseClick(course._id)}
+              >
+                <div className="course-info">
+                  <h3 className="course-title">{course.title}</h3>
+                  <div className="progress-container">
+                    <div
+                      className="progress-bar"
+                      style={{
+                        width: getProgressForCourse(course._id),
+                      }}
+                    ></div>
+                    <span className="progress-text">
+                      Progress: {getProgressForCourse(course._id)}
+                    </span>
+                  </div>
+                </div>
+                <button
+                  className="resume-button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleResumeClick(course._id);
+                  }}
+                >
+                  <span className="resume-icon">▶️</span>
+                  Resume
+                </button>
+              </div>
+            ))}
+        </div>
+      </section>
+
+      <section className="courses-section">
+        <h2 className="section-title">Available Courses</h2>
+        <div className="course-list">
+          {courses
+            .filter((course) => getProgressForCourse(course._id) === "0%")
+            .map((course) => (
+              <div
+                className="course-card new-course"
+                key={course._id}
+                onClick={() => handleCourseClick(course._id)}
+              >
+                <div className="course-info">
+                  <h3 className="course-title">{course.title}</h3>
+                  <p className="course-status">New Course</p>
+                </div>
+                <button className="start-button">
+                  <span className="start-icon">🎯</span>
+                  Start Learning
+                </button>
+              </div>
+            ))}
+        </div>
+      </section>
     </div>
   );
 };
