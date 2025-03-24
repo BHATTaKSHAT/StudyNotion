@@ -4,7 +4,7 @@
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
   position: relative;
   overflow: hidden;
 }
@@ -17,7 +17,7 @@
   border: none;
   border-radius: 50px;
   cursor: pointer;
-  background: linear-gradient(45deg, #007bff, #00ff88);
+  background: linear-gradient(45deg, #4d7cfe, #14bae4);
   color: white;
   font-size: 1rem;
   transition: all 0.3s ease;
@@ -43,7 +43,7 @@
   font-weight: bold;
   font-family: Arial, sans-serif;
   color: transparent;
-  background: linear-gradient(45deg, #007bff, #00ff88);
+  background: linear-gradient(45deg, #4d7cfe, #14bae4);
   background-repeat: no-repeat;
   background-size: 0% 100%;
   background-clip: text;
@@ -56,8 +56,9 @@
   justify-content: space-between;
   align-items: center;
   padding: 1.5rem 2rem;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   position: fixed;
   top: 0;
   left: 0;
@@ -73,7 +74,7 @@
 .logo-text {
   font-size: 1.8rem;
   font-weight: bold;
-  background: linear-gradient(45deg, #007bff, #00ff88);
+  background: linear-gradient(45deg, #4d7cfe, #14bae4);
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -89,7 +90,7 @@
 
 .hero-subtitle {
   font-size: 1.5rem;
-  color: #666;
+  color: rgba(255, 255, 255, 0.8);
   margin-bottom: 3rem;
   animation: fadeInUp 1s ease-out 0.2s backwards;
 }
@@ -103,7 +104,9 @@
 }
 
 .feature-card {
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  color: white;
   padding: 2rem;
   border-radius: 20px;
   width: 280px;
@@ -115,6 +118,7 @@
 
 .feature-card:hover {
   transform: translateY(-10px);
+  border-color: rgba(77, 124, 254, 0.5);
 }
 
 .feature-icon {
@@ -124,12 +128,12 @@
 }
 
 .feature-card h3 {
-  color: #333;
+  color: rgba(255, 255, 255, 0.8);
   margin-bottom: 1rem;
 }
 
 .feature-card p {
-  color: #666;
+  color: rgba(255, 255, 255, 0.8);
   line-height: 1.6;
 }
 
