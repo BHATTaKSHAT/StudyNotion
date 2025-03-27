@@ -62,7 +62,7 @@
 }
 
 .lesson-explorer li.active.completed {
-  background: linear-gradient(45deg, #1e5e2e, #2ecc71);
+  background: linear-gradient(45deg, #0a2511, #376d4e);
   color: white;
 }
 
@@ -95,9 +95,9 @@
   font-size: 2rem;
   color: #fff;
   margin-bottom: 2rem;
-  background: linear-gradient(45deg, #4d7cfe, #14bae4);
+  /* background: linear-gradient(45deg, #4d7cfe, #14bae4);
   background-clip: text;
-  -webkit-text-fill-color: transparent;
+  -webkit-text-fill-color: transparent; */
 }
 
 .lesson-content p {

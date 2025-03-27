@@ -7,7 +7,7 @@
   /* background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); */
   background: black;
   position: relative;
-  overflow: hidden; 
+  overflow: hidden;
 }
 
 .auth-button {
@@ -94,9 +94,10 @@
   color: rgba(255, 255, 255, 0.8);
   margin-bottom: 3rem;
   animation: fadeInUp 1s ease-out 0.2s backwards;
-  font-size: 6rem;
-  font-weight: 900;
-  font-family: 'Impact', sans-serif;
+  font-size: 8rem;
+  font-weight: 700;
+  font-family: "Passion One", sans-serif;
+  line-height: 0.8;
 }
 
 .features {
@@ -186,24 +187,71 @@
 
 .highlight {
   color: rgb(240, 240, 49);
+  text-shadow: 3px 3px 3px rgb(244, 182, 27);
+  -webkit-text-stroke: 1px black;
 }
 
 .blue {
-  background: linear-gradient(45deg, #4d7cfe, #11aa7e, #490453, #4d7cfe);
-  background-size: 300% 300%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: gradient 3s ease infinite;
+  color: rgb(92, 15, 128);
+  border: 5px dashed rgb(92, 15, 128);
+  border-radius: 15px;
+  padding: 0 10px;
+  margin: 0 5px;
+  display: inline-block;
 }
-@keyframes gradient {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
+
+.pencil-image {
+  position: absolute;
+  width: 300px; /* adjust size as needed */
+  height: auto;
+  top: 25%; /* adjust position as needed */
+  right: 76%;
+  transform: translateY(-50%);
+  z-index: 1;
+}
+
+.outline {
+  color: transparent;
+  -webkit-text-stroke: 1px white; 
+}
+
+.book-image {
+  position: absolute;
+  width: 250px; /* adjust size as needed */
+  height: auto;
+  top: 40%; /* adjust position as needed */
+  right: 9%;
+  transform: translateY(-50%);
+  z-index: 1;
+}
+
+.prplball-image {
+  position: absolute;
+  width: 150px; /* adjust size as needed */
+  height: auto;
+  top: 46%; /* adjust position as needed */
+  right: 82%;
+  transform: translateY(-50%);
+  z-index: 1;
+}
+
+.earth-image {
+  position: absolute;
+  width: 150px; /* adjust size as needed */
+  height: auto;
+  top: 18%; /* adjust position as needed */
+  right: 20%;
+  transform: translateY(-50%);
+  z-index: 1;
+}
+
+.tag-image {
+  position: absolute;
+  width: 170px; /* adjust size as needed */
+  height: auto;
+  top: 42%; /* adjust position as needed */
+  right: 63%;
+  transform: translateY(-50%);
+  z-index: 1;
+  filter: drop-shadow(5px 5px 10px rgba(0, 0, 0, 0.7))
 }
