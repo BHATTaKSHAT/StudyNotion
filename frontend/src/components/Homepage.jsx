@@ -19,6 +19,19 @@ const Homepage = () => {
     }
   };
 
+  React.useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.ctrlKey || e.metaKey) {
+        if (e.key === "+" || e.key === "-" || e.key === "=") {
+          e.preventDefault();
+        }
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
   return (
     <div className="homepage">
       <div className="nav-header">
@@ -46,10 +59,6 @@ const Homepage = () => {
         </p>
       </div>
       <div className="features">
-        {/* <h2 className="features-subtitle">
-            ENHANCE YOUR <br></br>
-            WITH ENGAGING LEARNING TOOLS
-          </h2> */}
         <div className="feature-card  icon-book">
           <span className="feature-icon">📚</span>
           <h3>Rich Content</h3>
@@ -65,6 +74,10 @@ const Homepage = () => {
           <h3>Track Progress</h3>
           <p>Monitor your learning journey with detailed progress tracking</p>
         </div>
+        {/* <h2 className="features-subtitle">
+            ENHANCE YOUR <br></br>
+            WITH ENGAGING LEARNING TOOLS
+          </h2> */}
       </div>
     </div>
   );

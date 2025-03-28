@@ -134,13 +134,15 @@ const Dashboard = () => {
             >
               <div className="course-info">
                 <h3 className="course-title">{course.title}</h3>
-                <div className="progress-container">
-                  <div
-                    className="progress-bar"
-                    style={{ width: getProgressForCourse(course._id) }}
-                  ></div>
+                <div className="progress-wrapper">
+                  <div className="progress-container">
+                    <div
+                      className="progress-bar"
+                      style={{ width: getProgressForCourse(course._id) }}
+                    ></div>
+                  </div>
                   <span className="progress-text">
-                    Progress: {getProgressForCourse(course._id)}
+                    {getProgressForCourse(course._id)}
                   </span>
                 </div>
               </div>
@@ -162,7 +164,7 @@ const Dashboard = () => {
             className="view-all-btn"
             onClick={() => setMyCoursesVisibleCount(myCoursesVisibleCount + 3)}
           >
-            View All
+            View More
           </button>
         )}
       </section>
@@ -196,7 +198,7 @@ const Dashboard = () => {
               setAvailableCoursesVisibleCount(availableCoursesVisibleCount + 3)
             }
           >
-            View All
+            View More
           </button>
         )}
       </section>

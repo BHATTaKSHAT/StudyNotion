@@ -241,7 +241,7 @@ h2 {
   padding-left: 1rem;
 }
 
-.section-title::before {
+/* .section-title::before {
   content: "";
   position: absolute;
   left: 0;
@@ -251,7 +251,7 @@ h2 {
   height: 70%;
   background: linear-gradient(45deg, #4d7cfe, #14bae4);
   border-radius: 2px;
-}
+} */
 
 .course-info {
   margin-bottom: 1rem;
@@ -263,27 +263,34 @@ h2 {
   margin: 0 0 1rem 0;
 }
 
+.progress-wrapper {
+  display: flex;
+  align-items: center;
+}
+
 .progress-container {
   background: #f0f0f0;
   border-radius: 50px;
   height: 10px;
   overflow: hidden;
   margin: 1rem 0;
-  position: relative;
+  flex: 1;
 }
 
 .progress-bar {
   height: 100%;
-  background: linear-gradient(45deg, #e100ff, #eea3ff);
+  background: linear-gradient(45deg, #00800f, #09b800);
   border-radius: 50px;
   transition: width 0.5s ease;
 }
 
 .progress-text {
-  display: block;
+ margin-left: 0.5rem;
   font-size: 0.9rem;
-  color: #666;
-  margin-top: 0.5rem;
+  color: #c4c2c2;
+  font-weight: bold;
+  pointer-events: none;
+  white-space: nowrap;
 }
 
 .course-status {
@@ -330,23 +337,26 @@ h2 {
   display: block;
   margin: 2rem auto 0;
   padding: 0.8rem 2rem;
-  background: linear-gradient(45deg, #000000, #40004d);
-  color: white;
+  background: none;
+  color: rgba(255, 255, 255, 0.7);
   border: none;
-  border-radius: 50px;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(77, 124, 254, 0.3);
+  transition: color 0.3s ease;
+  /* text-transform: uppercase; */
+  letter-spacing: 1px;
+  box-shadow: none;
+  transform: none;
 }
 
-.view-all-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(77, 124, 254, 0.4);
-}
-
-.view-all-btn:active {
-  transform: translateY(0);
-  box-shadow: 0 4px 15px rgba(77, 124, 254, 0.3);
+.view-all-btn:hover, 
+.view-all-btn:active,
+.view-all-btn:focus {
+  color: #4d7cfe;
+  background: none;
+  border: none;
+  box-shadow: none;
+  transform: none;
+  outline: none;
 }
