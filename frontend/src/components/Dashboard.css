@@ -360,3 +360,13 @@ h2 {
   transform: none;
   outline: none;
 }
+
+.course-logo {
+  width: 150px;
+  height: 150px;
+  object-fit: contain;
+  margin-bottom: 1rem;
+  display: block;  /* add this */
+  margin-left: auto;  /* add this */
+  margin-right: auto;
+}

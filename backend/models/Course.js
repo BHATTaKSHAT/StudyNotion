@@ -26,6 +26,7 @@ const courseSchema = new Schema({
   title: { type: String, required: true },
   description: { type: String },
   lessons: [lessonSchema],
+  logo : { type: String }
 });
 
 const Course = mongoose.model("Course", courseSchema);

@@ -133,6 +133,13 @@ const Dashboard = () => {
               onClick={() => handleCourseClick(course._id)}
             >
               <div className="course-info">
+                {course.logo && (
+                  <img
+                    src={`http://localhost:5000/logos/${course.logo}`}
+                    alt={`${course.title} Logo`}
+                    className="course-logo"
+                  />
+                )}
                 <h3 className="course-title">{course.title}</h3>
                 <div className="progress-wrapper">
                   <div className="progress-container">
@@ -181,6 +188,13 @@ const Dashboard = () => {
                 onClick={() => handleCourseClick(course._id)}
               >
                 <div className="course-info">
+                  {course.logo && (
+                    <img
+                      src={`http://localhost:5000/logos/${course.logo}`}
+                      alt={`${course.title} Logo`}
+                      className="course-logo"
+                    />
+                  )}
                   <h3 className="course-title">{course.title}</h3>
                   <p className="course-status">New Course</p>
                 </div>
