@@ -16,9 +16,9 @@
 }
 
 .course-card {
-  background: rgba(255,255,255,0.1);
+  background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255,255,255,0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 20px;
   padding: 1.5rem;
   transition: all 0.3s ease;
@@ -236,7 +236,7 @@ h2 {
 .section-title {
   font-size: 1.8rem;
   margin-bottom: 1.5rem;
-  color: rgba(255, 255, 255, 0.8);;
+  color: rgba(255, 255, 255, 0.8);
   position: relative;
   padding-left: 1rem;
 }
@@ -285,7 +285,7 @@ h2 {
 }
 
 .progress-text {
- margin-left: 0.5rem;
+  margin-left: 0.5rem;
   font-size: 0.9rem;
   color: #c4c2c2;
   font-weight: bold;
@@ -350,7 +350,7 @@ h2 {
   transform: none;
 }
 
-.view-all-btn:hover, 
+.view-all-btn:hover,
 .view-all-btn:active,
 .view-all-btn:focus {
   color: #4d7cfe;
@@ -366,7 +366,24 @@ h2 {
   height: 150px;
   object-fit: contain;
   margin-bottom: 1rem;
-  display: block;  /* add this */
-  margin-left: auto;  /* add this */
+  display: block; /* add this */
+  margin-left: auto; /* add this */
   margin-right: auto;
+  transition: transform 0.3s ease;
+}
+
+.course-card:hover .course-logo {
+  animation: float 2s ease-in-out infinite;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
 }
