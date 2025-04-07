@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import hljs from 'highlight.js';
+import 'highlight.js/styles/github-dark.css';
 import YouTube from "react-youtube";
 import axios from "axios";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
@@ -16,7 +18,6 @@ const CourseDetail = () => {
   const token = localStorage.getItem("token");
   const location = useLocation();
   const [player, setPlayer] = useState(null);
-
 
   useEffect(() => {
     axios
@@ -36,6 +37,11 @@ const CourseDetail = () => {
     }
   }, [token]);
 
+  useEffect(() => {
+    // Apply syntax highlighting after rendering the article content
+    hljs.highlightAll();
+  }, [currentItemIndex, course]);
+
   // Flatten lessons and quizzes
   const flattenedItems =
     course &&
@@ -45,7 +51,7 @@ const CourseDetail = () => {
         acc.push({
           type: "quiz",
           lessonIndex: index,
-          title: `Quiz ${index + 1}`,
+          title: `Quiz`,
         });
       }
       return acc;
@@ -109,35 +115,35 @@ const CourseDetail = () => {
   };
 
   // Update progress based on YouTube video events via react-youtube
- const onPlayerStateChange = (event) => {
-   if (!event || !event.target) return;
+  const onPlayerStateChange = (event) => {
+    if (!event || !event.target) return;
 
-   const duration = event.target.getDuration();
-   const currentTime = event.target.getCurrentTime();
-   const progress = (currentTime / duration) * 100;
+    const duration = event.target.getDuration();
+    const currentTime = event.target.getCurrentTime();
+    const progress = (currentTime / duration) * 100;
 
-   if (event.data === window.YT.PlayerState.PLAYING) {
-     setVideoProgress(progress);
+    if (event.data === window.YT.PlayerState.PLAYING) {
+      setVideoProgress(progress);
 
-     // If progress is over 90%, mark lesson as complete
-     if (progress >= 90) {
-       handleLessonCompletion();
-     }
-   }
+      // If progress is over 90%, mark lesson as complete
+      if (progress >= 90) {
+        handleLessonCompletion();
+      }
+    }
 
-   if (event.data === window.YT.PlayerState.PAUSED) {
-     // Update resume point only if progress is less than 90%
-     if (progress < 90) {
-       updateResume(currentTime);
-     }
-   }
+    if (event.data === window.YT.PlayerState.PAUSED) {
+      // Update resume point only if progress is less than 90%
+      if (progress < 90) {
+        updateResume(currentTime);
+      }
+    }
 
-   if (event.data === window.YT.PlayerState.ENDED) {
-     // Ensure completion on finished playing
-     setVideoProgress(100);
-     handleLessonCompletion();
-   }
- };
+    if (event.data === window.YT.PlayerState.ENDED) {
+      // Ensure completion on finished playing
+      setVideoProgress(100);
+      handleLessonCompletion();
+    }
+  };
 
   const updateResume = (currentTime, duration) => {
     axios.post(
@@ -270,19 +276,12 @@ const CourseDetail = () => {
   }
 
   const onPlayerReady = (event) => {
-     setPlayer(event.target);
-     console.log("onPlayerReady resumeTime:", resumeTime);
-     if (resumeTime > 0) {
-       event.target.seekTo(resumeTime, true);
-     }
+    setPlayer(event.target);
+    console.log("onPlayerReady resumeTime:", resumeTime);
+    if (resumeTime > 0) {
+      event.target.seekTo(resumeTime, true);
+    }
   };
-
-  // const handleVideoClick = () => {
-  //   if (player && resumeTime > 0) {
-  //     player.seekTo(resumeTime, true);
-  //     player.playVideo();
-  //   }
-  // };
 
   return (
     <div className="course-detail">
@@ -326,24 +325,27 @@ const CourseDetail = () => {
           <>
             <h3>{lessonData.title}</h3>
             {lessonData.videos.map((video, idx) => (
-                <YouTube
-                  key={`${currentItem.lessonIndex}-${idx}`}
-                  videoId={video.split("/").pop()}
-                  opts={{
-                    width: "640",
-                    height: "360",
-                    playerVars: { start: resumeTime }
-                  }}
-                  onReady={onPlayerReady}
-                  onStateChange={onPlayerStateChange}
-                />
+              <YouTube
+                key={`${currentItem.lessonIndex}-${idx}`}
+                videoId={video.split("/").pop()}
+                opts={{
+                  width: "640",
+                  height: "360",
+                  playerVars: { start: resumeTime },
+                }}
+                onReady={onPlayerReady}
+                onStateChange={onPlayerStateChange}
+              />
             ))}
-            <p>{lessonData.article}</p>
+            <div
+              dangerouslySetInnerHTML={{ __html: lessonData.article }}
+              className="article-content"
+            ></div>
           </>
         ) : (
           lessonData.quiz && (
             <div className="quiz">
-              <h4>{`Quiz for ${lessonData.title}`}</h4>
+              <h4>Quiz</h4>
               {lessonData.quiz.questions.map((question, qIndex) => (
                 <div key={qIndex} className="question">
                   <p>{question.questionText}</p>

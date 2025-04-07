@@ -53,7 +53,7 @@
 .lesson-explorer li.active {
   background: linear-gradient(45deg, #4d7cfe, #14bae4);
   color: white;
-  box-shadow: 0 4px 15px rgba(77, 124, 254, 0.3);
+  /* box-shadow: 0 4px 15px rgba(77, 124, 254, 0.3); */
 }
 
 .lesson-explorer li.completed {
@@ -62,7 +62,7 @@
 }
 
 .lesson-explorer li.active.completed {
-  background: linear-gradient(45deg, #0a2511, #376d4e);
+  background: linear-gradient(45deg, #0a2511, #0b4725);
   color: white;
 }
 
