@@ -38,8 +38,9 @@ const CourseDetail = () => {
   }, [token]);
 
   useEffect(() => {
-    // Apply syntax highlighting after rendering the article content
-    hljs.highlightAll();
+     const timer = setTimeout(() => {
+       hljs.highlightAll();
+     }, 1500);
   }, [currentItemIndex, course]);
 
   // Flatten lessons and quizzes

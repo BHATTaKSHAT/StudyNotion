@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./Dashboard.css";
+import { X } from "lucide-react";
 
 const Dashboard = () => {
   const [courses, setCourses] = useState([]);
@@ -11,6 +12,10 @@ const Dashboard = () => {
   const [myCoursesVisibleCount, setMyCoursesVisibleCount] = useState(3);
   const [availableCoursesVisibleCount, setAvailableCoursesVisibleCount] =
     useState(3);
+  // New state for search
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const searchContainerRef = useRef(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -99,6 +104,69 @@ const Dashboard = () => {
     return `${Math.round((completedItems / totalItems) * 100)}%`;
   };
 
+  useEffect(() => {
+    if (searchQuery.trim() === "") {
+      setSearchResults([]);
+      return;
+    }
+    const queryLower = searchQuery.toLowerCase();
+    const results = [];
+
+    courses.forEach((course) => {
+      // Check if the course title matches the search query
+      if (course.title.toLowerCase().includes(queryLower)) {
+        results.push({
+          courseId: course._id,
+          courseTitle: course.title,
+          lessonIndex: 0, // Default to the first lesson
+          lessonTitle: null, // No lesson title for course-only match
+          isCourseOnly: true, // Flag to indicate this is a course-only result
+        });
+      } else {
+        // Check each lesson within the course
+        course.lessons.forEach((lesson, idx) => {
+          if (
+            lesson.title.toLowerCase().includes(queryLower) ||
+            lesson.article.toLowerCase().includes(queryLower)
+          ) {
+            results.push({
+              courseId: course._id,
+              courseTitle: course.title,
+              lessonIndex: idx,
+              lessonTitle: lesson.title,
+              isCourseOnly: false, // Flag to indicate this is a lesson result
+            });
+          }
+        });
+      }
+    });
+
+    setSearchResults(results);
+  }, [searchQuery, courses]);
+
+  const handleSearchSelect = (result) => {
+    navigate(`/course/${result.courseId}?lesson=${result.lessonIndex}`);
+    // Clear search when a result is selected
+    setSearchQuery("");
+    setSearchResults([]);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        searchContainerRef.current &&
+        !searchContainerRef.current.contains(event.target)
+      ) {
+        setSearchResults([]); // Close search results
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   // Filter courses into My Courses and Available Courses sections
   const myCourses = courses.filter(
     (course) => getProgressForCourse(course._id) !== "0%"
@@ -112,10 +180,45 @@ const Dashboard = () => {
       <div className="header">
         <div className="welcome-container">
           <h2 className="welcome-text">
-            <span className="italic">Welcome back,</span>
+            <span className="italic">Welcome back, </span>
             <span className="bold">{username}</span>
           </h2>
           <p className="subtitle">Continue your learning journey</p>
+          {/* Search input under welcome container */}
+          <div className="search-container" ref={searchContainerRef}>
+            <input
+              type="text"
+              placeholder="Search courses and lessons..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="search-input"
+            />
+            {searchQuery && (
+              <button
+                className="clear-search-btn"
+                onClick={() => {
+                  setSearchQuery("");
+                  setSearchResults([]);
+                }}
+              >
+                <X size={20} />
+              </button>
+            )}
+            {searchResults.length > 0 && (
+              <div className="search-results-card">
+                {searchResults.map((result, idx) => (
+                  <div
+                    key={idx}
+                    className="search-result-item"
+                    onClick={() => handleSearchSelect(result)}
+                  >
+                    <strong>{result.courseTitle}</strong>
+                    {!result.isCourseOnly && ` - ${result.lessonTitle}`}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
         <button className="logout" onClick={handleLogout}>
           <span className="logout-icon">🚪</span>
