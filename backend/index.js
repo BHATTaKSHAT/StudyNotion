@@ -5,6 +5,7 @@ import db from "./database/db.js";
 import authRoutes from "./routes/authRoutes.js";
 import courseRoutes from "./routes/courseRoutes.js";
 import progressRoutes from "./routes/progressRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
 
 dotenv.config({
   path: "./.env",
@@ -19,6 +20,8 @@ app.use("/api/auth", authRoutes);
 app.use("/api/courses", courseRoutes);
 app.use("/api/progress", progressRoutes);
 app.use("/logos", express.static("logos"));
+app.use("/api/users", userRoutes);
+app.use("/uploads", express.static("uploads"));
 
 db()
   .then(() => {

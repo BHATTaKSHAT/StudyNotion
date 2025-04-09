@@ -16,6 +16,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  profilePicture: {
+    type: String,
+    default: null,
+  },
   progress: [
     {
       courseId: { type: mongoose.Schema.Types.ObjectId, ref: "Course" },
@@ -63,19 +67,19 @@ userSchema.methods.getResumePoint = function (course) {
     return { type: "lesson", index: 0 };
   }
 
-   if (
-     courseProgress &&
-     courseProgress.lastWatched &&
-     typeof courseProgress.lastWatched.timestamp === "number" &&
-     courseProgress.lastWatched.timestamp > 0
-   ) {
-     console.log("Resuming from lastWatched:", courseProgress.lastWatched);
-     return {
-       type: "lesson",
-       index: courseProgress.lastWatched.lessonIndex,
-       timestamp: courseProgress.lastWatched.timestamp,
-     };
-   }
+  if (
+    courseProgress &&
+    courseProgress.lastWatched &&
+    typeof courseProgress.lastWatched.timestamp === "number" &&
+    courseProgress.lastWatched.timestamp > 0
+  ) {
+    console.log("Resuming from lastWatched:", courseProgress.lastWatched);
+    return {
+      type: "lesson",
+      index: courseProgress.lastWatched.lessonIndex,
+      timestamp: courseProgress.lastWatched.timestamp,
+    };
+  }
 
   const { completedLessons, completedQuizzes } = courseProgress;
   console.log("Completed Lessons:", completedLessons);
@@ -99,7 +103,6 @@ userSchema.methods.getResumePoint = function (course) {
   console.log("All lessons and quizzes completed");
   return null;
 };
-
 
 // ...existing code...
 

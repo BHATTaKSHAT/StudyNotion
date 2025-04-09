@@ -17,6 +17,7 @@ const Dashboard = () => {
   const [searchResults, setSearchResults] = useState([]);
   const searchContainerRef = useRef(null);
   const navigate = useNavigate();
+  const [profilePicture, setProfilePicture] = useState(null);
 
   useEffect(() => {
     axios
@@ -42,6 +43,78 @@ const Dashboard = () => {
       setUsername(storedUsername);
     }
   }, []);
+
+  useEffect(() => {
+    const fetchProfilePicture = async () => {
+      const token = localStorage.getItem("token");
+      try {
+        const response = await axios.get(
+          "http://localhost:5000/api/users/profile",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        setProfilePicture(response.data.profilePicture);
+      } catch (err) {
+        console.error("Error fetching profile picture:", err);
+      }
+    };
+
+    fetchProfilePicture();
+  }, []);
+
+  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
+
+  const handleProfileMenuToggle = () => {
+    setIsProfileMenuOpen((prev) => !prev);
+  };
+
+  const [isUploading, setIsUploading] = useState(false);
+
+  <input
+    type="file"
+    id="fileInput"
+    style={{ display: "none" }}
+    onChange={async (e) => {
+      setIsUploading(true);
+      const formData = new FormData();
+      formData.append("profilePicture", e.target.files[0]);
+      const token = localStorage.getItem("token");
+      try {
+        const response = await axios.post(
+          "http://localhost:5000/api/users/profile-picture",
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+        setProfilePicture(response.data.profilePicture);
+      } catch (err) {
+        console.error("Error uploading profile picture:", err);
+      } finally {
+        setIsUploading(false);
+      }
+    }}
+  />;
+  {
+    isUploading && <p>Uploading...</p>;
+  }
+
+  const handleDeleteAccount = async () => {
+    const token = localStorage.getItem("token");
+    try {
+      await axios.delete("http://localhost:5000/api/users/delete", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      localStorage.clear();
+      navigate("/register");
+    } catch (err) {
+      console.error("Error deleting account:", err);
+    }
+  };
 
   const handleCourseClick = (courseId) => {
     navigate(`/course/${courseId}`);
@@ -159,13 +232,17 @@ const Dashboard = () => {
       ) {
         setSearchResults([]); // Close search results
       }
+
+      if (isProfileMenuOpen && !event.target.closest(".profile-container")) {
+        setIsProfileMenuOpen(false);
+      }
     };
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
+  }, [isProfileMenuOpen]);
 
   // Filter courses into My Courses and Available Courses sections
   const myCourses = courses.filter(
@@ -220,10 +297,64 @@ const Dashboard = () => {
             )}
           </div>
         </div>
-        <button className="logout" onClick={handleLogout}>
+        {/* <button className="logout" onClick={handleLogout}>
           <span className="logout-icon">🚪</span>
           Logout
-        </button>
+        </button> */}
+        <div className="profile-container">
+          <div className="profile-icon" onClick={handleProfileMenuToggle}>
+            {profilePicture ? (
+              <img
+                src={`http://localhost:5000${profilePicture}`}
+                alt="Profile"
+                className="profile-pic"
+              />
+            ) : (
+              <span className="profile-initial">
+                {username.charAt(0).toUpperCase()}
+              </span>
+            )}
+          </div>
+
+          {isProfileMenuOpen && (
+            <div className="profile-menu">
+              <button
+                onClick={() => document.getElementById("fileInput").click()}
+              >
+                {profilePicture
+                  ? "Change Profile Picture"
+                  : "Upload Profile Picture"}
+              </button>
+              <input
+                type="file"
+                id="fileInput"
+                style={{ display: "none" }}
+                onChange={async (e) => {
+                  const formData = new FormData();
+                  formData.append("profilePicture", e.target.files[0]);
+                  const token = localStorage.getItem("token");
+                  try {
+                    const response = await axios.post(
+                      "http://localhost:5000/api/users/profile-picture",
+                      formData,
+                      {
+                        headers: {
+                          Authorization: `Bearer ${token}`,
+                          "Content-Type": "multipart/form-data",
+                        },
+                      }
+                    );
+                    setProfilePicture(response.data.profilePicture);
+                  } catch (err) {
+                    console.error("Error uploading profile picture:", err);
+                  }
+                }}
+              />
+              <button onClick={handleLogout}>Logout</button>
+              <button onClick={handleDeleteAccount}>Delete Account</button>
+            </div>
+          )}
+        </div>
       </div>
 
       <section className="courses-section">
