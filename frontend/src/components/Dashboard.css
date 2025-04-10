@@ -170,23 +170,26 @@
 }
 
 .resume-button {
-  background: linear-gradient(45deg, #3e70fa, #0dcfff);
+  /* background: linear-gradient(45deg, #3e70fa, #0dcfff); */
+  background: #000000;
   color: white;
-  border: none;
-  padding: 0.75rem 1.25rem;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  padding: 0.7rem;
   border-radius: 50px;
   cursor: pointer;
   font-size: 1rem;
-  transition: background-color 0.3s ease;
-  box-shadow: 0 2px 5px rgba(0, 123, 255, 0.3);
-  margin-top: 1rem;
+  /* transition: background-color 0.3s ease; */
+  /* box-shadow: 0 2px 5px rgba(0, 123, 255, 0.3); */
+  margin: 0;
+  width: 30%;
 }
 
 .resume-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  border: 2px solid white;
+  /* box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
   background-color: #0056b3;
-  box-shadow: 0 4px 10px rgba(0, 123, 255, 0.5);
+  box-shadow: 0 4px 10px rgba(0, 123, 255, 0.5); */
 }
 
 .start-button {
@@ -354,7 +357,7 @@ h2 {
 .view-all-btn:hover,
 .view-all-btn:active,
 .view-all-btn:focus {
-  color: #4d7cfe;
+  color: #ffffff;
   background: none;
   border: none;
   box-shadow: none;
@@ -617,4 +620,18 @@ h2 {
 
 .profile-menu .delete-account-button:hover {
   background: #c82333;
+}
+
+.resume-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.resume-title {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.8);
+  font-style: italic;
 }

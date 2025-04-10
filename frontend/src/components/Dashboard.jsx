@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./Dashboard.css";
-import { X } from "lucide-react";
+import { X, CirclePlay, Rocket } from "lucide-react";
 
 const Dashboard = () => {
   const [courses, setCourses] = useState([]);
@@ -21,6 +21,7 @@ const Dashboard = () => {
   const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false);
   const [passwordInput, setPasswordInput] = useState("");
   const [deleteError, setDeleteError] = useState("");
+  const [resumeTitles, setResumeTitles] = useState({});
 
   useEffect(() => {
     axios
@@ -284,6 +285,52 @@ const Dashboard = () => {
     (course) => getProgressForCourse(course._id) === "0%"
   );
 
+  useEffect(() => {
+    const fetchResumeTitles = async () => {
+      const token = localStorage.getItem("token");
+      const titles = {};
+
+      for (const course of myCourses) {
+        try {
+          const response = await axios.get(
+            `http://localhost:5000/api/progress/resume/${course._id}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+
+          const resumePoint = response.data;
+
+          if (resumePoint) {
+            const courseData = courses.find((c) => c._id === course._id);
+            if (resumePoint.type === "lesson") {
+              titles[course._id] =
+                courseData.lessons[resumePoint.index]?.title ||
+                "Unknown Lesson";
+            } else if (resumePoint.type === "quiz") {
+              titles[course._id] =
+                courseData.lessons[resumePoint.index]?.quiz?.title ||
+                "Unknown Quiz";
+            }
+          }
+        } catch (error) {
+          console.error(
+            `Error fetching resume point for course ${course._id}:`,
+            error
+          );
+        }
+      }
+
+      setResumeTitles(titles);
+    };
+
+    if (myCourses.length > 0) {
+      fetchResumeTitles();
+    }
+  }, [myCourses, courses]);
+
   return (
     <div className="dashboard">
       <div className="header">
@@ -467,16 +514,21 @@ const Dashboard = () => {
                       </span>
                     </div>
                   </div>
-                  <button
-                    className="resume-button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleResumeClick(course._id);
-                    }}
-                  >
-                    <span className="resume-icon">▶️</span>
-                    Resume
-                  </button>
+                  <div className="resume-container">
+                    <button
+                      className="resume-button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleResumeClick(course._id);
+                      }}
+                    >
+                      <CirclePlay/>
+                      Resume
+                    </button>
+                    <span className="resume-title">
+                      {resumeTitles[course._id] || "Fetching..."}
+                    </span>
+                  </div>
                 </div>
               ))}
             </div>
@@ -517,7 +569,7 @@ const Dashboard = () => {
                   <p className="course-status">{course.description}</p>
                 </div>
                 <button className="start-button">
-                  <span className="start-icon">🎯</span>
+                  <Rocket />
                   Start Learning
                 </button>
               </div>
