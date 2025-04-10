@@ -3,6 +3,8 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./Dashboard.css";
 import { X, CirclePlay, Rocket } from "lucide-react";
+import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
+import "react-circular-progressbar/dist/styles.css";
 
 const Dashboard = () => {
   const [courses, setCourses] = useState([]);
@@ -487,50 +489,60 @@ const Dashboard = () => {
           <>
             <h2 className="section-title">My Courses</h2>
             <div className="course-list">
-              {myCourses.slice(0, myCoursesVisibleCount).map((course) => (
-                <div
-                  className="course-card"
-                  key={course._id}
-                  onClick={() => handleCourseClick(course._id)}
-                >
-                  <div className="course-info">
-                    {course.logo && (
-                      <img
-                        src={`http://localhost:5000/logos/${course.logo}`}
-                        alt={`${course.title} Logo`}
-                        className="course-logo"
-                      />
-                    )}
-                    <h3 className="course-title">{course.title}</h3>
-                    <div className="progress-wrapper">
-                      <div className="progress-container">
-                        <div
-                          className="progress-bar"
-                          style={{ width: getProgressForCourse(course._id) }}
-                        ></div>
+              {myCourses.slice(0, myCoursesVisibleCount).map((course) => {
+                const progressPercentage = parseInt(
+                  getProgressForCourse(course._id).replace("%", "")
+                );
+
+                return (
+                  <div
+                    className="course-card"
+                    key={course._id}
+                    onClick={() => handleCourseClick(course._id)}
+                  >
+                    <div className="course-info">
+                      {course.logo && (
+                        <img
+                          src={`http://localhost:5000/logos/${course.logo}`}
+                          alt={`${course.title} Logo`}
+                          className="course-logo"
+                        />
+                      )}
+                      <div className="progress-wrapper">
+                        <h3 className="course-title">{course.title}</h3>
+                        <div className="progress-indicator">
+                          <div className="circular-progress">
+                            <CircularProgressbar
+                              value={progressPercentage}
+                              strokeWidth={11}
+                              styles={buildStyles({
+                                pathColor: "#11ff00",
+                                trailColor: "#ffffff",
+                              })}
+                            />
+                          </div>
+                          <span className="progress-percentage">{`${progressPercentage}%`}</span>
+                        </div>
                       </div>
-                      <span className="progress-text">
-                        {getProgressForCourse(course._id)}
+                    </div>
+                    <div className="resume-container">
+                      <button
+                        className="resume-button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleResumeClick(course._id);
+                        }}
+                      >
+                        <CirclePlay />
+                        Resume
+                      </button>
+                      <span className="resume-title">
+                        {resumeTitles[course._id] || "Fetching..."}
                       </span>
                     </div>
                   </div>
-                  <div className="resume-container">
-                    <button
-                      className="resume-button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleResumeClick(course._id);
-                      }}
-                    >
-                      <CirclePlay/>
-                      Resume
-                    </button>
-                    <span className="resume-title">
-                      {resumeTitles[course._id] || "Fetching..."}
-                    </span>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
             {myCoursesVisibleCount < myCourses.length && (
               <button

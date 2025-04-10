@@ -8,6 +8,7 @@
   background: black;
   position: relative;
   overflow: hidden;
+  background-image: url("../assets/axiom-pattern.png");
 }
 
 .auth-button {
