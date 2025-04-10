@@ -12,6 +12,32 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!username || !email || !password) {
+      setMessage("All fields are required.");
+      return;
+    }
+
+    const usernameRegex = /^[A-Za-z]+$/;
+    if (!usernameRegex.test(username)) {
+      setMessage("Username can only contain letters and no spaces.");
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setMessage("Invalid email format.");
+      return;
+    }
+
+    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/;
+    if (!passwordRegex.test(password)) {
+      setMessage(
+        "Password must be at least 6 characters long and contain both letters and numbers."
+      );
+      return;
+    }
+
     try {
       const response = await axios.post(
         "http://localhost:5000/api/auth/register",
@@ -26,7 +52,11 @@ const Register = () => {
       localStorage.setItem("username", response.data.username);
       navigate("/dashboard");
     } catch (error) {
-      setMessage("Registration failed. Please try again.");
+      if (error.response?.data?.message) {
+        setMessage(error.response.data.message);
+      } else {
+        setMessage("Registration failed. Please try again.");
+      }
       console.error(error);
     }
   };

@@ -11,6 +11,12 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!email || !password) {
+      setMessage("All fields are required.");
+      return;
+    }
+
     try {
       const response = await axios.post(
         "http://localhost:5000/api/auth/login",
@@ -24,7 +30,13 @@ const Login = () => {
       localStorage.setItem("username", response.data.username);
       navigate("/dashboard");
     } catch (error) {
-      setMessage("Login failed. Please try again.");
+      if (error.response?.status === 404) {
+        setMessage("No email found");
+      } else if (error.response?.status === 401) {
+        setMessage("Wrong password");
+      } else {
+        setMessage("Login failed. Please try again.");
+      }
       console.error(error);
     }
   };
@@ -59,6 +71,12 @@ const Login = () => {
           Don't have an account?{" "}
           <span className="link" onClick={() => navigate("/register")}>
             Sign up
+          </span>
+        </p>
+        <p>
+          Forgot your password?{" "}
+          <span className="link" onClick={() => navigate("/forgot-password")}>
+            Reset it here
           </span>
         </p>
       </form>

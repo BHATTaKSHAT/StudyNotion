@@ -18,6 +18,9 @@ const Dashboard = () => {
   const searchContainerRef = useRef(null);
   const navigate = useNavigate();
   const [profilePicture, setProfilePicture] = useState(null);
+  const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false);
+  const [passwordInput, setPasswordInput] = useState("");
+  const [deleteError, setDeleteError] = useState("");
 
   useEffect(() => {
     axios
@@ -91,7 +94,7 @@ const Dashboard = () => {
             },
           }
         );
-        setProfilePicture(response.data.profilePicture);
+        setProfilePicture(`${response.data.profilePicture}?t=${Date.now()}`);
       } catch (err) {
         console.error("Error uploading profile picture:", err);
       } finally {
@@ -106,13 +109,24 @@ const Dashboard = () => {
   const handleDeleteAccount = async () => {
     const token = localStorage.getItem("token");
     try {
-      await axios.delete("http://localhost:5000/api/users/delete", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      localStorage.clear();
-      navigate("/register");
+      const response = await axios.post(
+        "http://localhost:5000/api/users/delete",
+        { password: passwordInput },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      if (response.status === 200) {
+        localStorage.clear();
+        navigate("/");
+      }
     } catch (err) {
-      console.error("Error deleting account:", err);
+      if (err.response?.status === 401) {
+        setDeleteError("Incorrect password. Please try again.");
+      } else {
+        console.error("Error deleting account:", err);
+        setDeleteError("Something went wrong. Please try again.");
+      }
     }
   };
 
@@ -182,36 +196,54 @@ const Dashboard = () => {
       setSearchResults([]);
       return;
     }
-    const queryLower = searchQuery.toLowerCase();
+
+    const stopWords = new Set(["in", "on", "the", "and", "a", "of", "to"]);
+    const queryTokens = searchQuery
+      .toLowerCase()
+      .split(/\s+/)
+      .filter((token) => !stopWords.has(token));
     const results = [];
 
     courses.forEach((course) => {
-      // Check if the course title matches the search query
-      if (course.title.toLowerCase().includes(queryLower)) {
+      const courseTitle = course.title.toLowerCase();
+      const courseDescription = course.description.toLowerCase();
+
+      // Check if any token matches the course title or description
+      const courseMatches = queryTokens.every(
+        (token) =>
+          courseTitle.includes(token) || courseDescription.includes(token)
+      );
+
+      if (courseMatches) {
         results.push({
           courseId: course._id,
           courseTitle: course.title,
-          lessonIndex: 0, // Default to the first lesson
-          lessonTitle: null, // No lesson title for course-only match
-          isCourseOnly: true, // Flag to indicate this is a course-only result
-        });
-      } else {
-        // Check each lesson within the course
-        course.lessons.forEach((lesson, idx) => {
-          if (
-            lesson.title.toLowerCase().includes(queryLower) ||
-            lesson.article.toLowerCase().includes(queryLower)
-          ) {
-            results.push({
-              courseId: course._id,
-              courseTitle: course.title,
-              lessonIndex: idx,
-              lessonTitle: lesson.title,
-              isCourseOnly: false, // Flag to indicate this is a lesson result
-            });
-          }
+          lessonIndex: 0,
+          lessonTitle: null,
+          isCourseOnly: true,
         });
       }
+
+      // Check lessons within the course
+      course.lessons.forEach((lesson, idx) => {
+        const lessonTitle = lesson.title.toLowerCase();
+        const lessonArticle = lesson.article?.toLowerCase() || "";
+
+        const lessonMatches = queryTokens.every(
+          (token) =>
+            lessonTitle.includes(token) || lessonArticle.includes(token)
+        );
+
+        if (lessonMatches) {
+          results.push({
+            courseId: course._id,
+            courseTitle: course.title,
+            lessonIndex: idx,
+            lessonTitle: lesson.title,
+            isCourseOnly: false,
+          });
+        }
+      });
     });
 
     setSearchResults(results);
@@ -280,6 +312,13 @@ const Dashboard = () => {
               >
                 <X size={20} />
               </button>
+            )}
+            {searchResults.length === 0 && searchQuery.trim() !== "" && (
+              <div className="search-results-card">
+                <div className="search-result-item">
+                  No results found for "{searchQuery}"
+                </div>
+              </div>
             )}
             {searchResults.length > 0 && (
               <div className="search-results-card">
@@ -351,11 +390,50 @@ const Dashboard = () => {
                 }}
               />
               <button onClick={handleLogout}>Logout</button>
-              <button onClick={handleDeleteAccount}>Delete Account</button>
+              <button
+                className="delete-account-button"
+                onClick={() => setIsDeletePopupOpen(true)}
+              >
+                Delete Account
+              </button>
             </div>
           )}
         </div>
       </div>
+
+      {isDeletePopupOpen && (
+        <div className="delete-popup-overlay">
+          <div className="delete-popup-card">
+            <h3>Delete Account</h3>
+            <p>
+              Are you sure you want to delete your account? This action cannot
+              be undone.
+            </p>
+            <input
+              type="password"
+              placeholder="Enter your password"
+              value={passwordInput}
+              onChange={(e) => setPasswordInput(e.target.value)}
+              className="delete-popup-input"
+            />
+            {deleteError && <p className="delete-popup-error">{deleteError}</p>}
+            <div className="delete-popup-actions">
+              <button
+                className="cancel-btn"
+                onClick={() => {
+                  setIsDeletePopupOpen(false);
+                  setDeleteError("");
+                }}
+              >
+                Cancel
+              </button>
+              <button className="confirm-btn" onClick={handleDeleteAccount}>
+                Confirm
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <section className="courses-section">
         <h2 className="section-title">My Courses</h2>
@@ -430,7 +508,7 @@ const Dashboard = () => {
                     />
                   )}
                   <h3 className="course-title">{course.title}</h3>
-                  <p className="course-status">New Course</p>
+                  <p className="course-status">{course.description}</p>
                 </div>
                 <button className="start-button">
                   <span className="start-icon">🎯</span>

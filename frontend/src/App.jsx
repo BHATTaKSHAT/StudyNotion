@@ -11,6 +11,8 @@ import Dashboard from "./components/Dashboard.jsx";
 import CourseDetail from "./components/CourseDetail.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import Homepage from "./components/Homepage.jsx";
+import ForgotPassword from "./components/ForgotPassword.jsx";
+import ResetPassword from "./components/ResetPassword.jsx";
 import "./App.css";
 
 const App = () => {
@@ -20,6 +22,8 @@ const App = () => {
         <Route path="/" element={<Homepage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
         <Route
           path="/dashboard"
           element={

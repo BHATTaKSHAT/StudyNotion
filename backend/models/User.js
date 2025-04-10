@@ -20,6 +20,14 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: null,
   },
+  resetPasswordCode: {
+    type: String,
+    default: null,
+  },
+  resetPasswordExpire: {
+    type: Date,
+    default: null,
+  },
   progress: [
     {
       courseId: { type: mongoose.Schema.Types.ObjectId, ref: "Course" },
