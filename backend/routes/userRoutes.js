@@ -94,6 +94,16 @@ router.post("/delete", protect, async (req, res) => {
       return res.status(401).json({ message: "Incorrect password" });
     }
 
+    if (user.profilePicture) {
+      const profilePicturePath = path.join(
+        process.cwd(),
+        user.profilePicture.replace("/", path.sep) // Ensure cross-platform compatibility
+      );
+      if (fs.existsSync(profilePicturePath)) {
+        fs.unlinkSync(profilePicturePath); // Delete the file
+      }
+    }
+
     // Delete the user
     await User.findByIdAndDelete(req.user._id);
 

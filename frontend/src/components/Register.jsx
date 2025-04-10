@@ -18,9 +18,11 @@ const Register = () => {
       return;
     }
 
-    const usernameRegex = /^[A-Za-z]+$/;
+    const usernameRegex = /^[A-Za-z!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]+$/;
     if (!usernameRegex.test(username)) {
-      setMessage("Username can only contain letters and no spaces.");
+      setMessage(
+        "Username can only contain letters and special characters, no spaces or numbers."
+      );
       return;
     }
 

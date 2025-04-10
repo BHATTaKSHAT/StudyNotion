@@ -15,11 +15,12 @@ const registerUser = async (req, res) => {
     return res.status(400).json({ message: "All fields are required." });
   }
 
-  const usernameRegex = /^[A-Za-z]+$/;
+  const usernameRegex = /^[A-Za-z!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]+$/;
   if (!usernameRegex.test(username)) {
-    return res
-      .status(400)
-      .json({ message: "Username can only contain letters and no spaces." });
+    return res.status(400).json({
+      message:
+        "Username can only contain letters and special characters, no spaces or numbers.",
+    });
   }
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -35,10 +36,18 @@ const registerUser = async (req, res) => {
     });
   }
 
-  const userExists = await User.findOne({ email });
-
+  const userExists = await User.findOne({
+    username: { $regex: `^${username}$`, $options: "i" },
+  });
   if (userExists) {
-    return res.status(400).json({ message: "User already exists" });
+    return res
+      .status(400)
+      .json({ message: "Username is already taken. Please choose another." });
+  }
+
+  const emailExists = await User.findOne({ email });
+  if (emailExists) {
+    return res.status(400).json({ message: "Email is already registered." });
   }
 
   const user = await User.create({

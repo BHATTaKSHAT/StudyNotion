@@ -436,55 +436,61 @@ const Dashboard = () => {
       )}
 
       <section className="courses-section">
-        <h2 className="section-title">My Courses</h2>
-        <div className="course-list">
-          {myCourses.slice(0, myCoursesVisibleCount).map((course) => (
-            <div
-              className="course-card"
-              key={course._id}
-              onClick={() => handleCourseClick(course._id)}
-            >
-              <div className="course-info">
-                {course.logo && (
-                  <img
-                    src={`http://localhost:5000/logos/${course.logo}`}
-                    alt={`${course.title} Logo`}
-                    className="course-logo"
-                  />
-                )}
-                <h3 className="course-title">{course.title}</h3>
-                <div className="progress-wrapper">
-                  <div className="progress-container">
-                    <div
-                      className="progress-bar"
-                      style={{ width: getProgressForCourse(course._id) }}
-                    ></div>
+        {myCourses.length > 0 && (
+          <>
+            <h2 className="section-title">My Courses</h2>
+            <div className="course-list">
+              {myCourses.slice(0, myCoursesVisibleCount).map((course) => (
+                <div
+                  className="course-card"
+                  key={course._id}
+                  onClick={() => handleCourseClick(course._id)}
+                >
+                  <div className="course-info">
+                    {course.logo && (
+                      <img
+                        src={`http://localhost:5000/logos/${course.logo}`}
+                        alt={`${course.title} Logo`}
+                        className="course-logo"
+                      />
+                    )}
+                    <h3 className="course-title">{course.title}</h3>
+                    <div className="progress-wrapper">
+                      <div className="progress-container">
+                        <div
+                          className="progress-bar"
+                          style={{ width: getProgressForCourse(course._id) }}
+                        ></div>
+                      </div>
+                      <span className="progress-text">
+                        {getProgressForCourse(course._id)}
+                      </span>
+                    </div>
                   </div>
-                  <span className="progress-text">
-                    {getProgressForCourse(course._id)}
-                  </span>
+                  <button
+                    className="resume-button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleResumeClick(course._id);
+                    }}
+                  >
+                    <span className="resume-icon">▶️</span>
+                    Resume
+                  </button>
                 </div>
-              </div>
-              <button
-                className="resume-button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleResumeClick(course._id);
-                }}
-              >
-                <span className="resume-icon">▶️</span>
-                Resume
-              </button>
+              ))}
             </div>
-          ))}
-        </div>
-        {myCoursesVisibleCount < myCourses.length && (
-          <button
-            className="view-all-btn"
-            onClick={() => setMyCoursesVisibleCount(myCoursesVisibleCount + 3)}
-          >
-            View More
-          </button>
+            {myCoursesVisibleCount < myCourses.length && (
+              <button
+                className="view-all-btn"
+                onClick={() =>
+                  setMyCoursesVisibleCount(myCoursesVisibleCount + 3)
+                }
+              >
+                View More
+              </button>
+            )}
+          </>
         )}
       </section>
 
