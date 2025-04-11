@@ -526,19 +526,35 @@ const Dashboard = () => {
                       </div>
                     </div>
                     <div className="resume-container">
-                      <button
-                        className="resume-button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleResumeClick(course._id);
-                        }}
-                      >
-                        <CirclePlay />
-                        Resume
-                      </button>
-                      <span className="resume-title">
-                        {resumeTitles[course._id] || "Fetching..."}
-                      </span>
+                      {progressPercentage === 100 ? (
+                        <div className="certificate-button-container">
+                          <button
+                            className="certificate-button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              navigate(`/certificate/${course._id}`);
+                            }}
+                          >
+                            Get Certificate
+                          </button>
+                        </div>
+                      ) : (
+                        <>
+                          <button
+                            className="resume-button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleResumeClick(course._id);
+                            }}
+                          >
+                            <CirclePlay />
+                            Resume
+                          </button>
+                          <span className="resume-title">
+                            {resumeTitles[course._id] || "Fetching..."}
+                          </span>
+                        </>
+                      )}
                     </div>
                   </div>
                 );
