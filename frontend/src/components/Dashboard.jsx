@@ -5,6 +5,7 @@ import "./Dashboard.css";
 import { X, CirclePlay, Rocket } from "lucide-react";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
+import studynotionlogo from "../assets/studynotionlogo.png";
 
 const Dashboard = () => {
   const [courses, setCourses] = useState([]);
@@ -336,13 +337,8 @@ const Dashboard = () => {
   return (
     <div className="dashboard">
       <div className="header">
-        <div className="welcome-container">
-          <h2 className="welcome-text">
-            <span className="italic">Welcome back, </span>
-            <span className="bold">{username}</span>
-          </h2>
-          <p className="subtitle">Continue your learning journey</p>
-          {/* Search input under welcome container */}
+        <div className="header-top">
+          <img src={studynotionlogo} alt="Logo" className="dashboard-logo" />
           <div className="search-container" ref={searchContainerRef}>
             <input
               type="text"
@@ -384,105 +380,110 @@ const Dashboard = () => {
               </div>
             )}
           </div>
-        </div>
-        {/* <button className="logout" onClick={handleLogout}>
-          <span className="logout-icon">🚪</span>
-          Logout
-        </button> */}
-        <div className="profile-container">
-          <div className="profile-icon" onClick={handleProfileMenuToggle}>
-            {profilePicture ? (
-              <img
-                src={`http://localhost:5000${profilePicture}`}
-                alt="Profile"
-                className="profile-pic"
-              />
-            ) : (
-              <span className="profile-initial">
-                {username.charAt(0).toUpperCase()}
-              </span>
+          <div className="profile-container">
+            <div className="profile-icon" onClick={handleProfileMenuToggle}>
+              {profilePicture ? (
+                <img
+                  src={`http://localhost:5000${profilePicture}`}
+                  alt="Profile"
+                  className="profile-pic"
+                />
+              ) : (
+                <span className="profile-initial">
+                  {username.charAt(0).toUpperCase()}
+                </span>
+              )}
+            </div>
+
+            {isProfileMenuOpen && (
+              <div className="profile-menu">
+                <button
+                  onClick={() => document.getElementById("fileInput").click()}
+                >
+                  {profilePicture
+                    ? "Change Profile Picture"
+                    : "Upload Profile Picture"}
+                </button>
+                <input
+                  type="file"
+                  id="fileInput"
+                  style={{ display: "none" }}
+                  onChange={async (e) => {
+                    const formData = new FormData();
+                    formData.append("profilePicture", e.target.files[0]);
+                    const token = localStorage.getItem("token");
+                    try {
+                      const response = await axios.post(
+                        "http://localhost:5000/api/users/profile-picture",
+                        formData,
+                        {
+                          headers: {
+                            Authorization: `Bearer ${token}`,
+                            "Content-Type": "multipart/form-data",
+                          },
+                        }
+                      );
+                      setProfilePicture(response.data.profilePicture);
+                    } catch (err) {
+                      console.error("Error uploading profile picture:", err);
+                    }
+                  }}
+                />
+                <button onClick={handleLogout}>Logout</button>
+                <button
+                  className="delete-account-button"
+                  onClick={() => setIsDeletePopupOpen(true)}
+                >
+                  Delete Account
+                </button>
+              </div>
             )}
           </div>
-
-          {isProfileMenuOpen && (
-            <div className="profile-menu">
-              <button
-                onClick={() => document.getElementById("fileInput").click()}
-              >
-                {profilePicture
-                  ? "Change Profile Picture"
-                  : "Upload Profile Picture"}
-              </button>
-              <input
-                type="file"
-                id="fileInput"
-                style={{ display: "none" }}
-                onChange={async (e) => {
-                  const formData = new FormData();
-                  formData.append("profilePicture", e.target.files[0]);
-                  const token = localStorage.getItem("token");
-                  try {
-                    const response = await axios.post(
-                      "http://localhost:5000/api/users/profile-picture",
-                      formData,
-                      {
-                        headers: {
-                          Authorization: `Bearer ${token}`,
-                          "Content-Type": "multipart/form-data",
-                        },
-                      }
-                    );
-                    setProfilePicture(response.data.profilePicture);
-                  } catch (err) {
-                    console.error("Error uploading profile picture:", err);
-                  }
-                }}
-              />
-              <button onClick={handleLogout}>Logout</button>
-              <button
-                className="delete-account-button"
-                onClick={() => setIsDeletePopupOpen(true)}
-              >
-                Delete Account
-              </button>
-            </div>
-          )}
         </div>
-      </div>
 
-      {isDeletePopupOpen && (
-        <div className="delete-popup-overlay">
-          <div className="delete-popup-card">
-            <h3>Delete Account</h3>
-            <p>
-              Are you sure you want to delete your account? This action cannot
-              be undone.
-            </p>
-            <input
-              type="password"
-              placeholder="Enter your password"
-              value={passwordInput}
-              onChange={(e) => setPasswordInput(e.target.value)}
-              className="delete-popup-input"
-            />
-            {deleteError && <p className="delete-popup-error">{deleteError}</p>}
-            <div className="delete-popup-actions">
-              <button
-                className="cancel-btn"
-                onClick={() => {
-                  setIsDeletePopupOpen(false);
-                  setDeleteError("");
-                }}
-              >
-                Cancel
-              </button>
-              <button className="confirm-btn" onClick={handleDeleteAccount}>
-                Confirm
-              </button>
+        {isDeletePopupOpen && (
+          <div className="delete-popup-overlay">
+            <div className="delete-popup-card">
+              <h3>Delete Account</h3>
+              <p>
+                Are you sure you want to delete your account? This action cannot
+                be undone.
+              </p>
+              <input
+                type="password"
+                placeholder="Enter your password"
+                value={passwordInput}
+                onChange={(e) => setPasswordInput(e.target.value)}
+                className="delete-popup-input"
+              />
+              {deleteError && (
+                <p className="delete-popup-error">{deleteError}</p>
+              )}
+              <div className="delete-popup-actions">
+                <button
+                  className="cancel-btn"
+                  onClick={() => {
+                    setIsDeletePopupOpen(false);
+                    setDeleteError("");
+                  }}
+                >
+                  Cancel
+                </button>
+                <button className="confirm-btn" onClick={handleDeleteAccount}>
+                  Confirm
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
+      <div className="welcome-container">
+        <h2 className="welcome-text">
+          <span className="italic">Welcome back, </span>
+          <span className="bold">{username}</span>
+        </h2>
+        <p className="subtitle">Continue your learning journey</p>
+      </div>
 
       <section className="courses-section">
         {myCourses.length > 0 && (
