@@ -129,10 +129,9 @@ button {
   /* box-shadow: 0 4px 15px rgba(77, 124, 254, 0.3); */
 }
 
-button:hover {
+/* button:hover {
   transform: translateY(-2px);
-  /* box-shadow: 0 6px 20px rgba(77, 124, 254, 0.4); */
-}
+} */
 
 p {
   margin-top: 1rem;
