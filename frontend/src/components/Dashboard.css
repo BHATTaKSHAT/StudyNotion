@@ -133,19 +133,38 @@
   font-size: 2.5rem;
   font-weight: bold;
   margin: 0;
-  background: linear-gradient(45deg, #ffffff, #ec85fe);
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: fadeIn 1s ease-out;
+  color: #ffffff;
+  animation: typing 3s steps(40, end);
+  white-space: nowrap;
+  overflow: hidden;
+  width: 0;
+  animation: typing 3s steps(40, end) forwards;
 }
+
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
+}
+
+/* @keyframes blink-caret {
+  from, to { border-color: transparent }
+  50% { border-color: #ec85fe }
+} */
 
 .italic {
   font-style: italic;
+  background: linear-gradient(45deg, #ffffff, #ec85fe);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .bold {
   font-weight: bold;
-  color: #007bff;
+  background: linear-gradient(45deg, #ffffff, #ec85fe);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 @keyframes text-reveal {
@@ -225,10 +244,11 @@ h2 {
 }
 
 .welcome-container {
-  /* animation: slideIn 0.5s ease-out;
-  max-width: 70%; */
   text-align: center;
   margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .subtitle {

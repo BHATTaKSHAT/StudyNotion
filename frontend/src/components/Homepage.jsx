@@ -81,7 +81,7 @@ const Homepage = () => {
           >
             {isAuthenticated ? "Dashboard" : "Login"}
           </NavLink>
-          <NavLink to="/" className="nav-link">
+          <NavLink to="/courses" className="nav-link">
             Courses
           </NavLink>
           <NavLink to="/" className="logo-link">

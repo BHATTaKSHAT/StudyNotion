@@ -16,6 +16,8 @@ import ForgotPassword from "./components/ForgotPassword.jsx";
 import ResetPassword from "./components/ResetPassword.jsx";
 import "./App.css";
 import CertificatePage from "./components/CertificatePage";
+import CoursePage from "./components/CoursePage.jsx";
+
 
 const App = () => {
   const [courses, setCourses] = useState([]);
@@ -60,6 +62,7 @@ const App = () => {
             </ProtectedRoute>
           }
         />
+        <Route path="/courses" element={<CoursePage courses={courses} />} />
       </Routes>
     </Router>
   );
