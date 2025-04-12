@@ -65,6 +65,26 @@
   background-color: rgba(119, 10, 70, 0.177);
 }
 
+.course-card:nth-child(7) {
+  background: rgba(0, 255, 255, 0.177);
+   animation-delay: 0.7s;
+}
+
+.course-card:nth-child(8) {
+    background: rgba(255, 0, 0, 0.177);
+     animation-delay: 0.8s;
+}
+
+.course-card:nth-child(9) {
+    background: rgba(93, 0, 255, 0.177);
+     animation-delay: 0.9s;
+}
+
+.course-card:nth-child(10) {
+    background: rgba(55, 255, 0, 0.177);
+     animation-delay: 1s;
+}
+
 .course-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);

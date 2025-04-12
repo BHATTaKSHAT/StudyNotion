@@ -89,10 +89,10 @@ const Homepage = () => {
               <img src={studynotionlogo} />
             </span>
           </NavLink>
-          <NavLink to="/" className="nav-link">
+          <NavLink to="/blog" className="nav-link">
             Blog
           </NavLink>
-          <NavLink to="/" className="nav-link">
+          <NavLink to="/contact-us" className="nav-link">
             Contact Us
           </NavLink>
         </div>

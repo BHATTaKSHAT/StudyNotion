@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import "./CoursePage.css";
+import styles from "./CoursePage.module.css"; // Import the CSS module
+import "./Dashboard.css"; // Import Dashboard.css for shared styles
 
 const CoursePage = ({ courses }) => {
   const [expandedCourseId, setExpandedCourseId] = useState(null);
@@ -9,31 +10,31 @@ const CoursePage = ({ courses }) => {
   };
 
   return (
-    <div className="course-page">
-      <h1 className="page-title">Available Courses</h1>
-      <div className="course-grid">
+    <div className={styles["course-page"]}>
+      <h1 className={styles["page-title"]}>Available Courses</h1>
+      <div className={styles["course-grid"]}>
         {courses.map((course) => (
           <div
             key={course._id}
-            className={`course-card ${
-              expandedCourseId === course._id ? "expanded" : ""
+            className={`${styles["course-card"]} ${
+              expandedCourseId === course._id ? styles["expanded"] : ""
             }`}
           >
             <img
               src={`http://localhost:5000/logos/${course.logo}`}
               alt={`${course.title} Logo`}
-              className="course-logo"
+              className={styles["course-logo"]}
             />
-            <h3 className="course-page-title">{course.title}</h3>
-            <p className="course-description">{course.description}</p>
+            <h3 className={styles["course-page-title"]}>{course.title}</h3>
+            <p className={styles["course-description"]}>{course.description}</p>
             <button
-              className="view-more-button"
+              className={styles["view-more-button"]}
               onClick={() => handleViewMore(course._id)}
             >
               {expandedCourseId === course._id ? "View Less" : "View More"}
             </button>
             {expandedCourseId === course._id && (
-              <div className="course-details">
+              <div className={styles["course-details"]}>
                 <h4>Lessons</h4>
                 <ul>
                   {course.lessons.map((lesson, index) => (

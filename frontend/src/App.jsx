@@ -17,6 +17,8 @@ import ResetPassword from "./components/ResetPassword.jsx";
 import "./App.css";
 import CertificatePage from "./components/CertificatePage";
 import CoursePage from "./components/CoursePage.jsx";
+import ContactUs from "./components/ContactUs.jsx";
+import BlogPage from "./components/BlogPage.jsx";
 
 
 const App = () => {
@@ -63,6 +65,8 @@ const App = () => {
           }
         />
         <Route path="/courses" element={<CoursePage courses={courses} />} />
+        <Route path="/contact-us" element={<ContactUs />} />
+        <Route path="/blog" element={<BlogPage />} />
       </Routes>
     </Router>
   );
