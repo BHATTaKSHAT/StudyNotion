@@ -6,6 +6,7 @@
   background: black;
   background-image: url("../assets/lined-paper-2.png");
   padding: 2rem;
+  font-family: "Fredoka";
 }
 
 .contact-container {
@@ -22,7 +23,8 @@
 
 .map-container {
   flex: 1;
-  height: 400px;
+  height: auto;
+  margin: 1rem 0 1rem 1rem;
 }
 
 .contact-details {

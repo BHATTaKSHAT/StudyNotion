@@ -4,6 +4,7 @@
   /* background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); */
   background: black;
   color: #fff;
+  font-family: "Fredoka";
 }
 
 /* Lesson Explorer Styling */
@@ -242,5 +243,11 @@
 iframe {
   border-radius: 15px;
   overflow: hidden;
-  border: none;
+  /* border: none; */
+}
+
+.video-placeholder {
+  min-height: 360px;
+  min-width: 640px ;
+  border-color: #38383870;
 }

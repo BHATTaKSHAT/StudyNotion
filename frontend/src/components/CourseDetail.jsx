@@ -326,17 +326,19 @@ const CourseDetail = () => {
           <>
             <h3>{lessonData.title}</h3>
             {lessonData.videos.map((video, idx) => (
-              <YouTube
-                key={`${currentItem.lessonIndex}-${idx}`}
-                videoId={video.split("/").pop()}
-                opts={{
-                  width: "640",
-                  height: "360",
-                  playerVars: { start: resumeTime },
-                }}
-                onReady={onPlayerReady}
-                onStateChange={onPlayerStateChange}
-              />
+              <div className="video-placeholder">
+                <YouTube
+                  key={`${currentItem.lessonIndex}-${idx}`}
+                  videoId={video.split("/").pop()}
+                  opts={{
+                    width: "640",
+                    height: "360",
+                    playerVars: { start: resumeTime },
+                  }}
+                  onReady={onPlayerReady}
+                  onStateChange={onPlayerStateChange}
+                />
+              </div>
             ))}
             <div
               dangerouslySetInnerHTML={{ __html: lessonData.article }}

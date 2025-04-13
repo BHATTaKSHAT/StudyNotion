@@ -11,10 +11,13 @@ import camera from "../assets/camera.png";
 import progress from "../assets/progress.png";
 import easy from "../assets/easy.png";
 import education from "../assets/education.png";
+import ylwball from "../assets/ylwball.png";
 import card from "../assets/card.png";
 import studynotionlogo from "../assets/studynotionlogo.png";
 import studynotionlogocolor from "../assets/studynotionlogocolor.png";
 import { Facebook, Instagram, Twitter, Youtube } from "lucide-react";
+import rocket from "../assets/rocket.png";
+import planet from "../assets/planet.png";
 
 const Homepage = () => {
   const navigate = useNavigate();
@@ -100,24 +103,32 @@ const Homepage = () => {
 
       <div className="hero-section">
         <h1 className="animated-text">Welcome to Study Notion</h1>
-        {/* <img src={pencilImage} alt="pencil" className="pencil-image" />
-        <img src={book} alt="book" className="book-image" />
-        <img src={prplball} alt="prplball" className="prplball-image" />
-        <img src={earth} alt="earth" className="earth-image" />
-        <img src={tag} alt="tag" className="tag-image" /> */}
         <p className="hero-subtitle">
-          CREATE NEW<br></br>
+          <img src={pencilImage} alt="pencil" className="pencil-image" />
+          CREATE NEW
+          <img src={earth} alt="earth" className="earth-image" />
+          <br></br>
           <span className="highlight">EXPERIENCE</span> WITH <br></br>
-          <span className="outline">WAYS OF</span>
+          <span className="outline">
+            <img src={prplball} alt="prplball" className="prplball-image" />
+            <img src={tag} alt="tag" className="tag-image" />
+            WAYS OF
+          </span>
+          <img src={book} alt="book" className="book-image" />
           <br></br>
           PERFECT <span className="blue">LEARNING</span>
         </p>
       </div>
       <div className="features">
         <h1>
-          DISCOVER SMART TOOLS THAT<br></br>EMPOWER YOUR
+          DISCOVER SMART TOOLS THAT
+          <img src={ylwball} className="ylwball-image" />
+          <br></br>EMPOWER YOUR{" "}
+          <img src={education} className="education-image" />
         </h1>
+        <img src={rocket} className="rocket-image" />
         <div className="feature-cards">
+          <img src={prplball} className="prplball-features" />
           <div className="feature-card  icon-book">
             <img src={camera} className="feature-icon" />
             <h2>Resume Learning</h2>
@@ -150,8 +161,9 @@ const Homepage = () => {
       </div>
       <div className="moving-cards">
         <h1>
-          OUR PROGRAM IS <img src={easy} />
+          OUR PROGRAM IS <img src={easy} className="easy-image" />
           TO USE <br /> AND USEFUL FOR THE FUTURE
+          <img src={earth} className="earth-mvgcrd" />
         </h1>
         <div className="tab-buttons">
           {tabs.map((tab, index) => (
@@ -176,8 +188,10 @@ const Homepage = () => {
             className="tab-icon"
           />
         </div>
+        <img src={planet} className="planet-image" />
       </div>
       <div className="faq-section">
+        <img src={tag} className="tag-faq" />
         <h1 className="faq-heading">Frequently Asked Questions</h1>
         {[
           {
@@ -219,10 +233,11 @@ const Homepage = () => {
         <p className="footer-subtitle">
           <span className="pink-highlight">LET'S</span> UNLOCK
           <br />
-          YOUR POTENTIAL
+          YOUR POTENTIAL<img src={pencilImage} className="footer-pencil" />
           <br />
-          WITH <span className="sn">STUDYNOTION</span>
+          <img src={tag} className="footer-tag" />WITH <span className="sn">STUDYNOTION</span>
         </p>
+        <img src={rocket} className="footer-rocket" />
         <div className="footer-logo">
           <img src={studynotionlogocolor} alt="StudyNotion Logo" />
           <p>Copyright @StudyNotion 2025 All Rights Reserved</p>

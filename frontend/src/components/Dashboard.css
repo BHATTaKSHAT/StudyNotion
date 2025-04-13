@@ -1,7 +1,7 @@
 .dashboard {
   position: relative;
   padding: 1rem;
-  font-family: "Arial", sans-serif;
+  font-family: "Fredoka";
   /* background: linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%); */
   background: black;
   min-height: 100vh;
@@ -21,7 +21,7 @@
 .course-card {
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 3px solid rgba(255, 255, 255, 0.1);
   border-radius: 20px;
   padding: 1.5rem;
   transition: all 0.3s ease;
@@ -38,57 +38,66 @@
 .course-card:nth-child(1) {
   animation-delay: 0.1s;
   background-color: rgba(119, 10, 10, 0.177);
+  border-color: rgba(119, 10, 10, 0.8);
 }
 
 .course-card:nth-child(2) {
   animation-delay: 0.2s;
   background-color: rgba(86, 119, 10, 0.177);
+  border-color: rgba(86, 119, 10, 0.8);
 }
 
 .course-card:nth-child(3) {
   animation-delay: 0.3s;
   background-color: rgba(100, 10, 118, 0.177);
+  border-color: rgba(100, 10, 118, 0.8);
 }
 
 .course-card:nth-child(4) {
   animation-delay: 0.4s;
   background-color: rgba(119, 114, 10, 0.177);
+  border-color: rgba(119, 114, 10, 0.8);
 }
 
 .course-card:nth-child(5) {
   animation-delay: 0.5s;
   background-color: rgba(10, 117, 119, 0.177);
+  border-color: rgba(10, 117, 119, 0.8);
 }
 
 .course-card:nth-child(6) {
   animation-delay: 0.6s;
   background-color: rgba(119, 10, 70, 0.177);
+  border-color: rgba(119, 10, 70, 0.8);
 }
 
 .course-card:nth-child(7) {
   background: rgba(0, 255, 255, 0.177);
+  border-color: rgba(0,255,255,0.8);
    animation-delay: 0.7s;
 }
 
 .course-card:nth-child(8) {
     background: rgba(255, 0, 0, 0.177);
+    border-color: rgba(255, 0, 0, 0.8);
      animation-delay: 0.8s;
 }
 
 .course-card:nth-child(9) {
     background: rgba(93, 0, 255, 0.177);
+    border-color: rgba(93, 0, 255, 0.8);
      animation-delay: 0.9s;
 }
 
 .course-card:nth-child(10) {
     background: rgba(55, 255, 0, 0.177);
+    border-color: rgba(55, 255, 0, 0.8);
      animation-delay: 1s;
 }
 
 .course-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
-  border-color: rgba(255, 255, 255, 0.5);
 }
 
 @keyframes fadeInUp {

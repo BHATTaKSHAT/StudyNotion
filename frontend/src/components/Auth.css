@@ -12,6 +12,7 @@
     #3b0764 20%,    /* deep purple */
     #000000 40%    /* fade to black */
   );
+  font-family: "Fredoka";
 }
 
 .auth-form {

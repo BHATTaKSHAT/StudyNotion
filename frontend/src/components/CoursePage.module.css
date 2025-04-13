@@ -14,6 +14,7 @@
   background-attachment: fixed; /* Keep the background fixed when scrolling */
   padding: 2rem;
   overflow-y: auto; /* Enable vertical scrolling of the content */
+  font-family: "Fredoka";
 }
 
 .page-title {
@@ -41,7 +42,7 @@
   position: relative;
   overflow: hidden;
   color: white;
-  border: 4px solid transparent; /* Default border */
+  border: 4px solid transparent;
 }
 
 .course-card:nth-child(1) {

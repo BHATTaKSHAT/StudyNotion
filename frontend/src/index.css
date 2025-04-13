@@ -1,6 +1,23 @@
+@font-face {
+  font-family: 'Fredoka';
+  src: url('./assets/static/Fredoka-Regular.ttf') format('truetype'),
+       url('./assets/static/Fredoka-Bold.ttf') format('truetype');
+  font-weight: 400 700 800; /* Adjust weights as needed */
+  font-style: normal;
+  font-display: swap;
+}
+
+/* @font-face {
+  font-family: 'Passion One';
+  src: url('./assets/PassionOne/PassionOne-Regular.ttf') format('truetype'),
+       url('./assets/PassionOne/PassionOne-Bold.ttf') format('truetype');
+  font-weight:1200;
+  font-style: bold;
+  font-display: swap;
+} */
+
 :root {
-  /* font-family: system-ui, Avenir, Helvetica, Arial, sans-serif; */
-  font-family: 'Inter', sans-serif;
+  font-family: 'Fredoka';
   line-height: 1.5;
   font-weight: 400;
 
@@ -8,10 +25,10 @@
   color: rgba(255, 255, 255, 0.87);
   background-color: #242424;
 
-  font-synthesis: none;
+  /* font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  -moz-osx-font-smoothing: grayscale; */
 }
 
 a {
