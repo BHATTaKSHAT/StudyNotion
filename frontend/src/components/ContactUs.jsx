@@ -53,8 +53,8 @@ const ContactUs = () => {
           <div className="contact-info">
             <h3>Our Contact Details</h3>
             <p>Email: support@studynotion.com</p>
-            <p>Phone: +1 (123) 456-7890</p>
-            <p>Address: 123 StudyNotion Lane, San Francisco, CA</p>
+            <p>Phone: +91 9350090734</p>
+            <p>Address: StudyNotion Hq, Chandigarh, India</p>
           </div>
         </div>
       </div>

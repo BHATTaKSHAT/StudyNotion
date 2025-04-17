@@ -20,13 +20,17 @@
 
 .blog-container {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 2rem;
   width: 100%;
   max-width: 800px;
 }
 
 .blog-card {
+  width: 300px;
+  border: 1px solid #ddd;
+  overflow: hidden;
+  cursor: pointer;
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
   border-radius: 15px;
@@ -42,18 +46,48 @@
 .blog-title {
   font-size: 1.8rem;
   font-weight: bold;
-  margin-bottom: 0.5rem;
+  margin: 1rem;
   color: rgb(149, 0, 255);
 }
 
 .blog-meta {
   font-size: 0.9rem;
   color: rgba(255, 255, 255, 0.7);
-  margin-bottom: 1rem;
+ margin: 0 1rem 1rem;
 }
 
 .blog-content {
   font-size: 1rem;
   line-height: 1.6;
   color: rgba(255, 255, 255, 0.9);
+  padding: 0 1rem 1rem;
+}
+
+.blog-card.expanded {
+  width: 100%;
+  max-width: 800px;
+  cursor: default;
+  flex-direction: column;
+}
+
+.blog-image {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 15px;
+}
+
+.expanded-content {
+  display: block;
+}
+
+.minimize-btn {
+  background-color: rgb(0, 0, 255);
+  color: #ffffff;
+  border: none;
+  font-size: 1rem;
+  padding: 1rem;
+  cursor: pointer;
+  text-align: left;
+  margin-bottom: 1rem;
 }

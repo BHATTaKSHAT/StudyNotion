@@ -99,7 +99,7 @@
   animation: fadeInUp 1s ease-out 0.2s backwards;
   font-size: 8rem;
   font-weight: 700;
-  font-family: "Passion One", sans-serif;
+  font-family: "Passion One",'Segoe UI';
   line-height: 0.8;
   overflow: hidden;
 }
@@ -120,7 +120,7 @@
   color: rgba(255, 255, 255, 0.8);
   font-size: 5rem;
   font-weight: 700;
-  font-family: "Passion One";
+  font-family: "Passion One",'Segoe UI';
   line-height: 0.5;
   overflow: hidden;
 }
@@ -382,14 +382,14 @@
   margin: 10px 0;
   text-align: left;
   font-size: 4rem;
-  font-family: "Passion One", sans-serif;
+  font-family: "Passion One",'Segoe UI';
   line-height: 0.9;
 }
 
 .tab-card p {
   font-size: 20px;
   text-align: left;
-  font-family: "Passion One", sans-serif;
+  font-family: "Passion One",'Segoe UI';
 }
 
 .tab-icon {
@@ -465,7 +465,7 @@
   animation: fadeInUp 1s ease-out 0.2s backwards;
   font-size: 8rem;
   font-weight: 700;
-  font-family: "Passion One", sans-serif;
+  font-family: "Passion One",'Segoe UI';
   line-height: 0.8;
   overflow: hidden;
 }
@@ -517,7 +517,7 @@
   text-align: center;
   margin-bottom: 3rem;
   color: rgba(255, 255, 255, 0.9);
-  font-family: "Passion One", sans-serif;
+  font-family: "Passion One",'Segoe UI';
 }
 
 .faq-item {

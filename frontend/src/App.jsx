@@ -27,7 +27,7 @@ const App = () => {
   useEffect(() => {
     // Fetch courses from the backend
     axios
-      .get("http://localhost:5000/api/courses")
+      .get("http://192.168.56.1:5000/api/courses")
       .then((response) => setCourses(response.data))
       .catch((error) => console.error("Error fetching courses:", error));
   }, []);
