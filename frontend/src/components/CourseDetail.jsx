@@ -180,7 +180,34 @@ const CourseDetail = () => {
       .then(() => {
         // Update local progressData so that the completed lesson is marked complete
         setProgressData((prevProgress) => {
-          if (!prevProgress) return prevProgress;
+          if (!prevProgress) {
+            return [
+              {
+                courseId: { _id: id },
+                completedLessons: [lessonIndex],
+                completedQuizzes: [],
+                lastWatched: null,
+                lastWatchedIndex: [],
+              },
+            ];
+          }
+
+          const existingProgress = prevProgress.find(
+            (p) => p.courseId._id === id
+          );
+          if (!existingProgress) {
+            // Add new course progress
+            return [
+              ...prevProgress,
+              {
+                courseId: { _id: id },
+                completedLessons: [lessonIndex],
+                completedQuizzes: [],
+                lastWatched: null,
+                lastWatchedIndex: [],
+              },
+            ];
+          }
 
           const newProgress = prevProgress.map((progress) => {
             if (progress.courseId._id === id) {
