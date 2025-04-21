@@ -12,9 +12,20 @@ router.post("/update", protect, async (req, res) => {
   try {
     const user = await User.findById(req.user._id);
 
-    let courseProgress = user.progress.find(
+    let progressIndex = user.progress.findIndex(
       (progress) => progress.courseId.toString() === courseId
     );
+
+     if (progressIndex === -1) {
+       user.progress.push({
+         courseId,
+         completedLessons: [],
+         completedQuizzes: [],
+       });
+       progressIndex = user.progress.length - 1;
+     }
+
+    let courseProgress = user.progress[progressIndex];
 
     if (!courseProgress) {
       courseProgress = { courseId, completedLessons: [], completedQuizzes: [] };

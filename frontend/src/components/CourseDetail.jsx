@@ -227,18 +227,37 @@ const CourseDetail = () => {
     );
 
     if (allAnswered && allCorrect) {
-      axios.post(
-        "http://localhost:5000/api/progress/update",
-        {
-          courseId: id,
-          lessonIndex,
-          isQuiz: true,
-          isCompleted: true,
-        },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      axios
+        .post(
+          "http://localhost:5000/api/progress/update",
+          {
+            courseId: id,
+            lessonIndex,
+            isQuiz: true,
+            isCompleted: true,
+          },
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        )
+        .then(() => {
+          // Update local progressData to reflect quiz completion
+          setProgressData((prevProgress) => {
+            if (!prevProgress) return prevProgress;
+
+            const newProgress = prevProgress.map((progress) => {
+              if (progress.courseId._id === id) {
+                // Add the quiz to completedQuizzes if not already present
+                if (!progress.completedQuizzes.includes(lessonIndex)) {
+                  progress.completedQuizzes.push(lessonIndex);
+                }
+              }
+              return progress;
+            });
+
+            return newProgress;
+          });
+        });
     }
   }, [quizResults, course, flattenedItems, currentItemIndex, id, token]);
 
