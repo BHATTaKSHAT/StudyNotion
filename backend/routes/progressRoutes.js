@@ -143,7 +143,7 @@ router.get("/resume/:courseId", protect, async (req, res) => {
   const { courseId } = req.params;
 
   try {
-    console.log("Fetching course:", courseId);
+    // console.log("Fetching course:", courseId);
     const user = await User.findById(req.user._id).populate("progress.courseId");
     const course = await Course.findById(courseId);
 
@@ -151,8 +151,8 @@ router.get("/resume/:courseId", protect, async (req, res) => {
       console.log("Course not found");
       return res.status(404).json({ message: "Course not found" });
     }
-    console.log("Course found:", course.title);
-    console.log("User progress:", user.progress);
+    // console.log("Course found:", course.title);
+    // console.log("User progress:", user.progress);
 
     const resumePoint = user.getResumePoint(course);
 
@@ -161,7 +161,7 @@ router.get("/resume/:courseId", protect, async (req, res) => {
       return res.json({ message: "All lessons and quizzes completed!" });
     }
 
-    console.log("Resume Point:", resumePoint);
+    // console.log("Resume Point:", resumePoint);
     res.json(resumePoint);
   } catch (err) {
     console.error("Error in resume route:", err);

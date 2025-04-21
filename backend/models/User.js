@@ -63,12 +63,12 @@ userSchema.methods.matchPassword = async function (enteredPassword) {
 // ...existing code...
 
 userSchema.methods.getResumePoint = function (course) {
-  console.log("Finding progress for course:", course._id);
+  //console.log("Finding progress for course:", course._id);
 
   const courseProgress = this.progress.find((progress) =>
     progress.courseId.equals(course._id)
   );
-  console.log("Course Progress Found:", courseProgress);
+  //console.log("Course Progress Found:", courseProgress);
 
   if (!courseProgress) {
     console.log("No progress found, returning first lesson");
@@ -81,7 +81,7 @@ userSchema.methods.getResumePoint = function (course) {
     typeof courseProgress.lastWatched.timestamp === "number" &&
     courseProgress.lastWatched.timestamp > 0
   ) {
-    console.log("Resuming from lastWatched:", courseProgress.lastWatched);
+    //console.log("Resuming from lastWatched:", courseProgress.lastWatched);
     return {
       type: "lesson",
       index: courseProgress.lastWatched.lessonIndex,
@@ -90,20 +90,20 @@ userSchema.methods.getResumePoint = function (course) {
   }
 
   const { completedLessons, completedQuizzes } = courseProgress;
-  console.log("Completed Lessons:", completedLessons);
-  console.log("Completed Quizzes:", completedQuizzes);
+  //console.log("Completed Lessons:", completedLessons);
+  //console.log("Completed Quizzes:", completedQuizzes);
 
   // Iterate through lessons in order
   for (let i = 0; i < course.lessons.length; i++) {
     const lesson = course.lessons[i];
 
     if (!completedLessons.includes(i)) {
-      console.log("Resuming to incomplete lesson:", i);
+      //console.log("Resuming to incomplete lesson:", i);
       return { type: "lesson", index: i };
     }
 
     if (lesson.quiz && !completedQuizzes.includes(i)) {
-      console.log("Resuming to quiz for lesson:", i);
+      //console.log("Resuming to quiz for lesson:", i);
       return { type: "quiz", index: i };
     }
   }

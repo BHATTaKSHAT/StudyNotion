@@ -311,11 +311,11 @@ const Dashboard = () => {
             if (resumePoint.type === "lesson") {
               titles[course._id] =
                 courseData.lessons[resumePoint.index]?.title ||
-                "Unknown Lesson";
+                "Next Lesson";
             } else if (resumePoint.type === "quiz") {
               titles[course._id] =
                 courseData.lessons[resumePoint.index]?.quiz?.title ||
-                "Unknown Quiz";
+                "Quiz";
             }
           }
         } catch (error) {
